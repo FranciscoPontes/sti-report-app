@@ -1,9 +1,9 @@
 {
-  "name": "test-expo",
-  "displayName": "test-expo",
+  "name": "report-app",
+  "displayName": "report-app",
   "expo": {
-    "name": "test-expo",
-    "slug": "test-expo",
+    "name": "report-app",
+    "slug": "report-app",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"

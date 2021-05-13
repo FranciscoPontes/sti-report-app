@@ -1,12 +1,9 @@
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import React, { Fragment, useState } from 'react';
-import { View, StyleSheet, ToastAndroid } from "react-native";
+import { StyleSheet } from "react-native";
 import { Marker } from 'react-native-maps';
-import { Container, Content, Button, Text } from 'native-base';
+import { Container, Button, Text } from 'native-base';
 import * as Location from 'expo-location';
-import {Header, Tab, Item} from 'react-native-elements';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const styles = StyleSheet.create({
     container: {
@@ -23,10 +20,6 @@ const styles = StyleSheet.create({
       position: 'absolute',
       top: '50%'
     },
-    header: {
-      ...StyleSheet.absoluteFillObject,
-      zIndex: 999
-    },
     buttonContainer: {
       display: 'flex',
       flexDirection: 'row'
@@ -38,8 +31,6 @@ const MapContainer = props => {
   const [ geoLocation, setGeoLocation ] = useState( { latitude: 32.6592174,
                                                       longitude: -16.9239346, });
                                              
-  const Tab = createBottomTabNavigator();
-
   findCoordinates = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       await Location.hasServicesEnabledAsync()
@@ -65,9 +56,6 @@ const MapContainer = props => {
       <Fragment>
 
         <Container style={styles.container}>
-        <Header style={styles.header}
-          centerComponent={{ text: 'MY TITLE', style: { color: '#fff' } }}
-        />
         <MapView
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           style={styles.map}
@@ -88,19 +76,7 @@ const MapContainer = props => {
           <Button onPress={findCoordinates}>
               <Text>Click Me!</Text>
           </Button>
-          <Button onPress={() => ToastAndroid.show({
-                text: 'Hi there!',
-                buttonText: 'Okay'
-              })}>
-              <Text>Click Me for toast!</Text>
-          </Button>
         </Container>
-        <NavigationContainer>
-          <Tab.Navigator>
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Settings" component={SettingsScreen} />
-          </Tab.Navigator>
-        </NavigationContainer>
         </Container>
       </Fragment>
     );
