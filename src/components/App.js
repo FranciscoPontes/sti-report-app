@@ -9,14 +9,16 @@ import EcraReport from '../components/ecraReport/ecraReport';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button } from 'react-native';
 
-import * as GoogleSignIn from 'expo-google-sign-in';
+import { firebaseInit, postToCollection, reportCollection, userCollection, getCollection, firebaseLogin } from '../../services/firebaseAPI';
+
+import * as Google from 'expo-auth-session/providers/google';
 
 const styles = StyleSheet.create({
     header: {
       ...StyleSheet.absoluteFillObject,
       zIndex: 999
     },
-    signInButton: {
+    buttonsContainer: {
       ...StyleSheet.absoluteFillObject,
       position: 'absolute',
       top: '50%'
@@ -29,53 +31,52 @@ const App = () => {
 
   const [user, setUser] = useState(null);
 
-  const finalizeSignIn = async () => {
-    const user = await GoogleSignIn.signInSilentlyAsync();
-    setUser(user);
-  }
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
+        {
+          clientId: '628699918493-33ee12rl5c289ifq5b3v5t5v6hskmag4.apps.googleusercontent.com',
+          },
+    );
+    
+    useEffect(() => {
+      const tryLogin = async () => response?.type === 'success' ? setUser( await firebaseLogin(response) ) : null;
+      tryLogin();
+    }, [response]);
 
-  signOutAsync = async () => {
-    await GoogleSignIn.signOutAsync();
-    setUser(null);
-  };
+  useEffect( () => firebaseInit(), [])
 
-  signInAsync = async () => {
-    try {
-      await GoogleSignIn.askForPlayServicesAsync();
-      const { type, user } = await GoogleSignIn.signInAsync();
-      console.log(user);
-      if (type === 'success') {
-        finalizeSignIn();
-      }
-    } catch ({ message }) {
-      alert('login: Error:' + message);
-    }
-  };
+  useEffect( () => console.log(user), [user])
 
-  useEffect( () => {
-    const initSignInAttempt = async () => {
-      await GoogleSignIn.initAsync({
-        clientId: '628699918493-qg7puaoqa6m34u7a8cih3bh06amcvhdd.apps.googleusercontent.com',
-      });
-      console.log('init done');
-      finalizeSignIn();
-    }
-    initSignInAttempt();
-  }, [] )
+  // postData = () => postToCollection(reportCollection, { name: 'martin', type: 'trash', access: 'difficult'});
+  postData = () => postToCollection(userCollection, { name: 'martin'} );
+
+  getData =  () => console.log( getCollection(userCollection) );
 
   return (
     !user ?
-      <Button style={styles.signInButton}
-      title="Google Sign-In"
-      onPress={signInAsync}
-    />
+      <View style={styles.buttonsContainer}>
+        <Button
+          disabled={!request}
+          title="Google Sign-In"
+          onPress={() => {
+            promptAsync();
+            }}
+        />
+        <Button 
+          title="Add to firestore"
+          onPress={postData}
+        />
+        <Button 
+          title="Get data from firestore"
+          onPress={postData}
+        />
+      </View>
     :
     <NavigationContainer>
       <Header style={styles.header}
           centerComponent={{ text: 'REPORT APP', style: { color: '#fff' } }}
       />
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={EcraInicial} />
+        <Tab.Screen name="Home" component={EcraInicial} initialParams={ { user: user } }/>
         <Tab.Screen name="Map" component={EcraMapa} />
         <Tab.Screen name="Report" component={EcraReport} />
         <Tab.Screen name="Perfil" component={EcraPerfil} />
