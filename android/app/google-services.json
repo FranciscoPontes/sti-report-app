@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "628699918493",
+    "project_id": "sti-report-app",
+    "storage_bucket": "sti-report-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628699918493:android:fb239b67eb69749f46a474",
+        "android_client_info": {
+          "package_name": "com.testexpo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "628699918493-qg7puaoqa6m34u7a8cih3bh06amcvhdd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuvBMzy9EtfsoUJaqxXbLNfL6BLPs5Rqw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "628699918493-qg7puaoqa6m34u7a8cih3bh06amcvhdd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
