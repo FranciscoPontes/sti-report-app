@@ -9,7 +9,7 @@ import EcraReport from '../components/ecraReport/ecraReport';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button } from 'react-native';
 
-import { firebaseInit, postToCollection, reportCollection, userCollection, getCollection, firebaseLogin } from '../../services/firebaseAPI';
+import * as FirebaseAPI from '../../services/firebaseAPI';
 
 import * as Google from 'expo-auth-session/providers/google';
 
@@ -31,25 +31,23 @@ const App = () => {
 
   const [user, setUser] = useState(null);
 
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
         {
           clientId: '628699918493-33ee12rl5c289ifq5b3v5t5v6hskmag4.apps.googleusercontent.com',
-          },
-    );
+        },
+  );
     
-    useEffect(() => {
-      const tryLogin = async () => response?.type === 'success' ? setUser( await firebaseLogin(response) ) : null;
-      tryLogin();
-    }, [response]);
+  useEffect(() => {
+    const tryLogin = async () => response?.type === 'success' ? setUser( await FirebaseAPI.login(response) ) : null;
+    tryLogin();
+  }, [response]);
 
-  useEffect( () => firebaseInit(), [])
-
-  useEffect( () => console.log(user), [user])
+  useEffect( () => FirebaseAPI.startFirebase(), [])
 
   // postData = () => postToCollection(reportCollection, { name: 'martin', type: 'trash', access: 'difficult'});
-  postData = () => postToCollection(userCollection, { name: 'martin'} );
+  // postData = () => postToCollection(userCollection, { name: 'martin'} );
 
-  getData =  () => console.log( getCollection(userCollection) );
+  // getData =  () => console.log( getCollection(userCollection) );
 
   return (
     !user ?
@@ -60,14 +58,6 @@ const App = () => {
           onPress={() => {
             promptAsync();
             }}
-        />
-        <Button 
-          title="Add to firestore"
-          onPress={postData}
-        />
-        <Button 
-          title="Get data from firestore"
-          onPress={postData}
         />
       </View>
     :

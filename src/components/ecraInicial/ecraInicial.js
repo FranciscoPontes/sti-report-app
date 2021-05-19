@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button, Text } from 'native-base';
-import { Image, StyleSheet  } from 'react-native';
+import { Container, Text } from 'native-base';
+import { Image, StyleSheet, Button  } from 'react-native';
+import * as FirebaseAPI from '../../../services/firebaseAPI';
 
 const styles = StyleSheet.create({
     ava: {
@@ -12,6 +13,20 @@ const styles = StyleSheet.create({
 const EcraInicial = props => {
     const userData = props.route.params.user; 
 
+    const reportTemplate = 
+    {
+        user: '113842996349886677035',
+        latitude: '15',
+        longitude: '20',
+        accessType: 'medium', // easy, medium, hard
+        extractionType: 'truck',
+        isAnimalReport: false,
+        typeOfAnimal: null,
+        typeOfTrash: 'plastic', // plastic etc..
+        submissionDate: new Date('2017-08-15'), // data atual
+        status: 'processing' // processing, closed, rejected
+    }
+
     return (
         <Container>
             <Text>Este é o ecra inicial</Text>
@@ -20,6 +35,18 @@ const EcraInicial = props => {
             <Image 
                 style={styles.ava}
                 source={{ uri: userData.photoURL }} />
+            <Button 
+              title="Add new template report"
+              onPress={() => FirebaseAPI.addNewReport(reportTemplate)}
+            />
+            <Button 
+              title="Get user reports"
+              onPress={FirebaseAPI.getCurrentUserReports}
+            />
+            <Button 
+              title="Get all reports"
+              onPress={FirebaseAPI.getAllReports}
+            />
         </Container>
     )
 }
