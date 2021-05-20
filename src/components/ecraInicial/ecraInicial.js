@@ -27,6 +27,13 @@ const EcraInicial = props => {
         status: 'processing' // processing, closed, rejected
     }
 
+    const handleButtonPress = async () => {
+        var array = await FirebaseAPI.getAllReports();
+        console.log(array);
+        console.log('----------------------');
+        array.map( obj => console.log(obj));
+    }
+
     return (
         <Container>
             <Text>Este é o ecra inicial</Text>
@@ -45,7 +52,7 @@ const EcraInicial = props => {
             />
             <Button 
               title="Get all reports"
-              onPress={FirebaseAPI.getAllReports}
+              onPress={handleButtonPress}
             />
         </Container>
     )

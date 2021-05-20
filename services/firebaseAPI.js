@@ -69,9 +69,13 @@ const getData = async ( collection, query = null ) => {
         return db.collection(collection)
         .get()
         .then( querySnapshot => {
-            querySnapshot.forEach((doc) => {
-                console.log(doc.id, " => ", doc.data());
+            let dataArray = [];
+            querySnapshot.forEach( doc => {
+                // console.log(doc.id, " => ", doc.data());
+                dataArray.push(doc.data());
             });
+            // console.log(dataArray);
+            return dataArray;
         })
         .catch((error) => {
             console.error("Error getting documents: ", error);
@@ -80,9 +84,12 @@ const getData = async ( collection, query = null ) => {
     return db.collection(collection).where(query.attribute, query.comparator, query.value)
     .get()
     .then( querySnapshot => {
-        querySnapshot.forEach((doc) => {
-            console.log(doc.id, " => ", doc.data());
+        let dataArray = [];
+        querySnapshot.forEach( doc => {
+            // console.log(doc.id, " => ", doc.data());
+            dataArray.push(doc.data());
         });
+        return dataArray;
     })
     .catch((error) => {
         console.error("Error getting documents: ", error);
