@@ -5,8 +5,7 @@ import Map from './Map';
 const EcraMapa = () => {
     return (
         <Container>
-            <Text>Este é o ecra do mapa</Text>
-            <Map />
+            <Map/>
         </Container>
     )
 }
