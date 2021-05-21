@@ -121,11 +121,11 @@ const postImage = async ( uId, image ) => {
 
 const addUser = async () => {
     const docRef = db.collection(USER_COLLECTION).doc(userData.uid);
-
+    
     await docRef.get().then( async doc => {
         if (doc.exists) console.log("User already exists");
         else {
-            await postToCollection( USER_COLLECTION, userData, userData.uid);
+            await postToCollection( USER_COLLECTION, {...userData, numberCompletedReports: 0 }, userData.uid );
             console.log('User added');
         }
     }).catch( error => {
@@ -141,3 +141,5 @@ export const addNewReport = async data => {
     // TODO: process images
     return await postToCollection( REPORT_COLLECTION, data );
 }
+
+export const updateCurrentUserData = async data => await postToCollection( USER_COLLECTION, data, userData.uid );
