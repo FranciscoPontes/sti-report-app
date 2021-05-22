@@ -10,6 +10,8 @@ import * as Location from 'expo-location';
 
 const EcraReport = props => {
     const userChoice = props.route.params.reportType; // 0 -> Animais 1 -> Lixo
+    const navigation = props.navigation;
+
     const [image, setImage] = useState(null);
     const [typeAnimal, setTypeAnimal] = useState(null);
     const [typeOfTrash, setTypeOfTrash] = useState(null);
@@ -18,6 +20,8 @@ const EcraReport = props => {
     const [adicionalInfo, setAdicionalInfo] = useState("");
     const [anonymous, setAnonymous] = useState(false);
     const [geoLocation, setGeoLocation] = useState({ latitude: 32.6592174, longitude: -16.9239346 });
+
+    const [location, setLocation] = useState("");
 
     useEffect(() => {
         (async () => {
@@ -43,9 +47,18 @@ const EcraReport = props => {
                             setGeoLocation( { 
                                 latitude: response.coords.latitude, 
                                 longitude: response.coords.longitude 
-                            } );
+                            });
                         } )
                         .catch( error => console.log(error) )
+    };
+
+    const reverseCoord = async () => {
+        await Location.reverseGeocodeAsync(geoLocation)
+                        .then( response => {
+                            var data = response[0].street + ", " + response[0].postalCode + ", " + response[0].city + ", " + response[0].country;
+                            setLocation(data);
+                        } )
+                        .catch( error => console.log(error))
     };
 
     const pickImage = async () => {
@@ -258,7 +271,7 @@ const EcraReport = props => {
                     }
 
                     <Label style={{paddingTop: 15}}>Informação Adicional</Label>
-                    <Textarea rowSpan={5} bordered placeholder="" defaultValue={adicionalInfo} onChangeText={adicionalInfo => setAdicionalInfo(adicionalInfo)}/>
+                    <Textarea rowSpan={5} bordered enableAutoAutomaticScroll={false} scrollEnabled={false} keyboardShouldPersistTaps="always" placeholder="" defaultValue={adicionalInfo} onChangeText={adicionalInfo => setAdicionalInfo(adicionalInfo)}/>
 
                     <Label style={{paddingTop: 15}}>Localização</Label>
                     <View style={{height: 300}}>
@@ -271,13 +284,13 @@ const EcraReport = props => {
                                 latitudeDelta: 0.015,
                                 longitudeDelta: 0.0121,
                             }}
-                            onPress={(e) => setGeoLocation({
+                            onPress={(e) => {setGeoLocation({
                                 latitude: e.nativeEvent.coordinate.latitude, 
                                 longitude: e.nativeEvent.coordinate.longitude
-                            })}
+                            }); reverseCoord()}}
                         >
                             {
-                                  geoLocation &&
+                                  geoLocation && reverseCoord() &&
                                   <Marker coordinate={{ latitude : geoLocation.latitude , longitude : geoLocation.longitude }} />
                             }
                             <Text style={styles.mapBadge}>Clique na posição desejada</Text>
@@ -286,11 +299,16 @@ const EcraReport = props => {
                     
                     <Grid style={{paddingTop: 15, alignItems: 'center', justifyContent: 'center'}}>
                         <Row>
+                            {geoLocation && <Text>{location}</Text>}
+                        </Row>
+                        <Row style={{paddingTop: 10}}>
                             <Label style={{paddingRight: 5, paddingTop: 5}}>Enviar Anonimamente</Label>
                             <Switch value={anonymous} onValueChange={() => setAnonymous(!anonymous)} />
                         </Row>
                         <Row style={{paddingTop: 15}}>
-                            <Button info onClick={() => null}><Text>Continuar</Text></Button>
+                            <Button info onPress={() => navigation.navigate('SummaryScreen', {
+                                image, typeAnimal, typeOfTrash, extractionType, accessType, adicionalInfo, anonymous, geoLocation, isAnimalReport: (userChoice === 0 ? true : false)
+                            })}><Text>Continuar</Text></Button>
                         </Row>
                     </Grid>
                 </Form>
