@@ -69,7 +69,7 @@ const App = () => {
         <Tab.Screen name="Home" component={EcraInicial} initialParams={ { user: user } }/>
         <Tab.Screen name="Map" component={EcraMapa} />
         <Tab.Screen name="Report" component={EcraReport} />
-        <Tab.Screen name="Perfil" component={EcraPerfil} />
+        <Tab.Screen name="Perfil" component={EcraPerfil} initialParams={ { user: user } }/>
       </Tab.Navigator>
     </NavigationContainer>
   );
