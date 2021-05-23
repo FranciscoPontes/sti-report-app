@@ -111,15 +111,15 @@ const EcraSummary = props => {
 
     const sendNewReport = async () => {
         const data = {
-            accessType:  accessType,
-            extractionType:  extractionType,
-            isAnimalReport:  typeAnimal ? true : false,
+            accessType:  report.accessType,
+            extractionType:  report.extractionType,
+            isAnimalReport:  report.isAnimalReport,
             latitude: report.geoLocation.latitude,
             longitude: report.geoLocation.longitude,
             status: 'processing',
             submissionDate: new Date(),
-            typeOfAnimal: typeAnimal,
-            typeOfTrash: typeOfTrash,
+            typeOfAnimal: report.typeAnimal,
+            typeOfTrash: report.typeOfTrash,
             user: API.userData.uid,
             anonymousMode: anonymousMode
         };

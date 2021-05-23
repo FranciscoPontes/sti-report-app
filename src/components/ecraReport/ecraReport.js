@@ -293,13 +293,14 @@ const EcraReport = props => {
                                   geoLocation && reverseCoord() &&
                                   <Marker coordinate={{ latitude : geoLocation.latitude , longitude : geoLocation.longitude }} />
                             }
-                            <Text style={styles.mapBadge}>Clique na posição desejada</Text>
                         </MapView>
                     </View>
+
+                    <Text style={styles.mapBadge}>Clique na posição desejada</Text>
                     
                     <Grid style={{paddingTop: 15, alignItems: 'center', justifyContent: 'center'}}>
                         <Row>
-                            {geoLocation && <Text>{location}</Text>}
+                            {geoLocation && <Text style={{textAlign: "center"}}>{location}</Text>}
                         </Row>
                         <Row style={{paddingTop: 10}}>
                             <Label style={{paddingRight: 5, paddingTop: 5}}>Enviar Anonimamente</Label>
@@ -347,13 +348,13 @@ const styles = StyleSheet.create({
     },
     mapBadge: {
         textAlign: 'center', 
-        top: "90%", 
         backgroundColor: "orange", 
         color:'white', 
         borderRadius:10, 
         overflow:'hidden', 
         width: "65%", 
-        marginHorizontal: 65
+        marginHorizontal: 65,
+        marginTop: 15
     },
     gridImage: {
         flex: 1, 
