@@ -44,13 +44,8 @@ const App = () => {
 
   useEffect( () => FirebaseAPI.startFirebase(), [])
 
-  // postData = () => postToCollection(reportCollection, { name: 'martin', type: 'trash', access: 'difficult'});
-  // postData = () => postToCollection(userCollection, { name: 'martin'} );
-
-  // getData =  () => console.log( getCollection(userCollection) );
-
   return (
-  /*   !user ?
+    !user ?
       <View style={styles.buttonsContainer}>
         <Button
           disabled={!request}
@@ -60,7 +55,7 @@ const App = () => {
             }}
         />
       </View>
-    : */
+    :
     <NavigationContainer>
       <Header style={styles.header}
           centerComponent={{ text: 'REPORT APP', style: { color: '#fff' } }}

@@ -37,12 +37,13 @@ const styles = StyleSheet.create({
 
 
 const EcraPerfil = props => {
-    const userData = props.route.params.user; 
+    const userData = FirebaseAPI.userData; 
     const [reports, setReports] = useState([]);
     var result;
 
     const ReportsCheck = async () => {  
     const response = await FirebaseAPI.getCurrentUserReports();
+    console.log(response);
     setReports(response);}
         
     useEffect(() => { ReportsCheck();},[]);

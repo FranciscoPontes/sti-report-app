@@ -4,6 +4,7 @@ import { Container, Content, Text, Card, CardItem, Body, Label, Button, Col } fr
 import { Switch } from 'react-native-elements';
 import { Row, Grid } from 'react-native-easy-grid';
 import * as Location from 'expo-location';
+import * as API from '../../../services/firebaseAPI';
 
 const EcraSummary = props => {
     const report = props.route.params;
@@ -14,6 +15,7 @@ const EcraSummary = props => {
     const [typeOfTrash, setTypeOfTrash] = useState(null);
     const [extractionType, setExtractionType] = useState(null);
     const [accessType, setAccessType] = useState(null);
+    const [anonymousMode, setAnonymousMode] = useState(report.anonymous);
 
     useEffect(() => {
         setDetails();
@@ -101,8 +103,6 @@ const EcraSummary = props => {
     const reverseCoord = async () => {
         await Location.reverseGeocodeAsync(report.geoLocation)
                         .then( response => {
-                            console.log(response);
-                            console.log(report.geoLocation);
                             var data = response[0].street + ", " + response[0].postalCode + ", " + response[0].city + ", " + response[0].country;
                             setLocation(data);
                         } )
@@ -117,12 +117,16 @@ const EcraSummary = props => {
             latitude: report.geoLocation.latitude,
             longitude: report.geoLocation.longitude,
             status: 'processing',
-            submissionData: new Date(),
+            submissionDate: new Date(),
             typeOfAnimal: typeAnimal,
-            typeOfTrash: typeOfTrash
+            typeOfTrash: typeOfTrash,
+            user: API.userData.uid,
+            anonymousMode: anonymousMode
         };
         console.log(data);
-        // navigation.navigate('ThanksScreen');
+        await API.addNewReport(data);
+        console.log('Data processed!');
+        navigation.navigate('ThanksScreen');
     }
 
     return (
@@ -172,7 +176,7 @@ const EcraSummary = props => {
                 <Grid style={{paddingTop: 15, alignItems: 'center', justifyContent: 'center'}}>
                     <Row style={{paddingTop: 10}}>
                         <Label style={{paddingRight: 5, paddingTop: 5}}>Enviar Anonimamente</Label>
-                        <Switch value={report.anonymous} onValueChange={() => null} />
+                        <Switch value={anonymousMode} onValueChange={() => setAnonymousMode(!anonymousMode)} />
                     </Row>
                     <Row style={{paddingTop: 15}}>
                         <Col>
