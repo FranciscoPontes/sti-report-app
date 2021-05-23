@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Header, Item} from 'react-native-elements';
 import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
-import EcraReport from '../components/ecraReport/ecraReport';
+import Report from '../components/ecraReport/report';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button } from 'react-native';
 
@@ -50,7 +50,7 @@ const App = () => {
   // getData =  () => console.log( getCollection(userCollection) );
 
   return (
-    !user ?
+  /*   !user ?
       <View style={styles.buttonsContainer}>
         <Button
           disabled={!request}
@@ -60,7 +60,7 @@ const App = () => {
             }}
         />
       </View>
-    :
+    : */
     <NavigationContainer>
       <Header style={styles.header}
           centerComponent={{ text: 'REPORT APP', style: { color: '#fff' } }}
@@ -68,8 +68,8 @@ const App = () => {
       <Tab.Navigator>
         <Tab.Screen name="Home" component={EcraInicial} initialParams={ { user: user } }/>
         <Tab.Screen name="Map" component={EcraMapa} />
-        <Tab.Screen name="Report" component={EcraReport} />
-        <Tab.Screen name="Perfil" component={EcraPerfil} initialParams={ { user: user } }/>
+        <Tab.Screen name="Report" component={Report} />
+        <Tab.Screen name="Perfil" component={EcraPerfil} />
       </Tab.Navigator>
     </NavigationContainer>
   );
