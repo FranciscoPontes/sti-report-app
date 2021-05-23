@@ -101,11 +101,29 @@ const EcraSummary = props => {
     const reverseCoord = async () => {
         await Location.reverseGeocodeAsync(report.geoLocation)
                         .then( response => {
+                            console.log(response);
+                            console.log(report.geoLocation);
                             var data = response[0].street + ", " + response[0].postalCode + ", " + response[0].city + ", " + response[0].country;
                             setLocation(data);
                         } )
                         .catch( error => console.log(error))
     };
+
+    const sendNewReport = async () => {
+        const data = {
+            accessType:  accessType,
+            extractionType:  extractionType,
+            isAnimalReport:  typeAnimal ? true : false,
+            latitude: report.geoLocation.latitude,
+            longitude: report.geoLocation.longitude,
+            status: 'processing',
+            submissionData: new Date(),
+            typeOfAnimal: typeAnimal,
+            typeOfTrash: typeOfTrash
+        };
+        console.log(data);
+        // navigation.navigate('ThanksScreen');
+    }
 
     return (
         <Container>
@@ -161,7 +179,7 @@ const EcraSummary = props => {
                             <Button light onPress={() => {navigation.navigate('ReportScreen')}} style={{alignSelf: 'flex-end', marginRight: 10}}><Text style={{color: "white"}}>Editar</Text></Button>
                         </Col>
                         <Col>
-                            <Button info onPress={() => {navigation.navigate('ThanksScreen')}}><Text>Enviar</Text></Button>
+                            <Button info onPress={sendNewReport}><Text>Enviar</Text></Button>
                         </Col>
                     </Row>
                 </Grid>
