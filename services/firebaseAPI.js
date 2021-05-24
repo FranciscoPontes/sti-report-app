@@ -119,7 +119,10 @@ const postImage = async ( uId, image ) => {
     await completeRef.put(image).then().catch(error => console.error( error ) );
 };
 
-const addUser = async () => {
+// used to login with test user
+export const changeUserData = data => userData = data;
+
+export const addUser = async () => {
     const docRef = db.collection(USER_COLLECTION).doc(userData.uid);
     
     await docRef.get().then( async doc => {

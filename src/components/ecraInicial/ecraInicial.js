@@ -10,6 +10,8 @@ const EcraInicial = props => {
     const navigation = props.navigation;
     const [ userReports, setUserReports ] = useState([]);
     const [ refreshing, setRefreshing ] = useState(false);
+    const userData = API.userData;
+    console.log(userData);
 
     const refreshData = async () => {
       console.log('refreshing..');
@@ -19,26 +21,31 @@ const EcraInicial = props => {
     }
 
     const transformData = async data => {
-      const transformedData = Promise.all( data.map( async val => modifiedObj(val) ) )
-      console.log('here');
+      // console.log(data);
+      const transformedData = await Promise.all( data.map( async val => await modifiedObj(val) ) )
+      // console.log(transformedData);
       setUserReports(transformedData);
     }
 
     const modifiedObj = async data => {
       console.log('modifying obj');
       const city = await reverseCoord({
-        latitude: data.latitude, 
-        longitude: data.longitude
+        'latitude': data.latitude, 
+        'longitude': data.longitude
       })
-      console.log(city);
+      console.log('Obj modified city: ' + city);
       return {...data, city: city};
     }
  
     const reverseCoord = async location => await Location.reverseGeocodeAsync(location)
                                         .then( response => response[0].city )
-                                        .catch( error => console.log(error.message) )
+                                        .catch( error => error.message )
 
-    useEffect( () => refreshData(),[])
+    // useEffect( () => () => {
+    //   console.log('---- use effect ----');
+    //   console.log(userData);
+    //   refreshData();
+    // } ,[userData])
 
     return (
         <SafeAreaView>

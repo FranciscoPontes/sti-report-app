@@ -36,6 +36,15 @@ const App = () => {
           clientId: '628699918493-33ee12rl5c289ifq5b3v5t5v6hskmag4.apps.googleusercontent.com',
         },
   );
+
+  const testData = {
+    "displayName": "Test user",
+    "email": null,
+    "phoneNumber": null,
+    "photoURL": null,
+    "providerId": "google.com",
+    "uid": "test-user",
+  }
     
   useEffect(() => {
     const tryLogin = async () => response?.type === 'success' ? setUser( await FirebaseAPI.login(response) ) : null;
@@ -52,6 +61,15 @@ const App = () => {
           title="Google Sign-In"
           onPress={() => {
             promptAsync();
+            }}
+        />
+        <Button
+          disabled={!request}
+          title="Login (test user)"
+          onPress={ async () => {
+            FirebaseAPI.changeUserData(testData);
+            await FirebaseAPI.addUser(testData);
+            setUser(FirebaseAPI.userData);
             }}
         />
       </View>

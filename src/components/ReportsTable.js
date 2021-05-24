@@ -5,7 +5,7 @@ import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 const ReportsTable = props => {
     const tableHead = [];
     const data = props.data;
-
+    console.log(data);
     const element = (data, index) => (
       <TouchableOpacity onPress={() => null}>
         <View style={styles.btn}>
@@ -25,11 +25,12 @@ const ReportsTable = props => {
               <TableWrapper key={index} style={styles.row}>
                 {
                   Object.keys(rowData).map( (cellData, cellIndex) => {
+                    // if ( cellData != 'typeOfAnimal' || cellData != 'submissionDate' || cellData != 'city' || cellData != 'status' || cellData != 'typeOfTrash') return;
                     console.log(cellData);
                     return (
                         <Cell key={cellIndex} 
                         // data={cellIndex === 3 ? element(cellData, index) : cellData} 
-                        data={rowData[cellData]} 
+                        data={ cellData == 'submissionDate' ? rowData[cellData].seconds : rowData[cellData]} 
                         textStyle={styles.text}/>
                         )
                       })
