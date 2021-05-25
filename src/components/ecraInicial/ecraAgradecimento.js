@@ -13,7 +13,7 @@ const EcraAgradecimento = props => {
                     <Image source={{uri: 'https://i.pinimg.com/originals/8c/40/05/8c4005377742272315e792545a9c93df.gif'}} style={{flex: 1, width: null, height: null, resizeMode: 'contain'}}/>
                 </Row>
                 <Row style={{alignSelf: "center"}}>
-                    <Button info onPress={() => {navigation.replace('ReportScreen'); navigation.navigate('Home')}}><Text>Voltar</Text></Button>
+                    <Button info onPress={() => {navigation.reset({index: 0, routes: [{ name: 'Home' }]})}}><Text>Voltar</Text></Button>
                 </Row>
             </Grid>
             

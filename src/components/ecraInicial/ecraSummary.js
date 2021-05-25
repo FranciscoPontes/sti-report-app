@@ -181,7 +181,7 @@ const EcraSummary = props => {
                     </Row>
                     <Row style={{paddingTop: 15}}>
                         <Col>
-                            <Button light onPress={() => {navigation.navigate('ReportScreen')}} style={{alignSelf: 'flex-end', marginRight: 10}}><Text style={{color: "white"}}>Editar</Text></Button>
+                            <Button light onPress={() => {navigation.goBack(null)}} style={{alignSelf: 'flex-end', marginRight: 10}}><Text style={{color: "white"}}>Editar</Text></Button>
                         </Col>
                         <Col>
                             <Button info onPress={sendNewReport}><Text>Enviar</Text></Button>

@@ -11,10 +11,10 @@ const EcraInicial = props => {
             <Grid style={{paddingTop: 15, alignItems: 'center', justifyContent: 'center'}}>
                 <Row>
                     <Col>
-                        <Button light onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
+                        <Button light onPress={() => {navigation.navigate('Home', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
                     </Col>
                     <Col>
-                        <Button info onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10}}><Text>Report Lixo</Text></Button>
+                        <Button info onPress={() => {navigation.navigate('Home', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10}}><Text>Report Lixo</Text></Button>
                     </Col>
                 </Row>
             </Grid>
