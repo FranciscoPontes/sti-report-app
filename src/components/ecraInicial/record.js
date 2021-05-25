@@ -38,19 +38,6 @@ const record = () => {
       </View>
     )
   }
-
-  if ('F' == 'closed') {
-    return (
-
-      <View style={styles.process}>
-        <Text>
-          not
-        </Text>
-        <Image style={{ height: 40, width: 40 }} source={require('../../../assets/check.png')}></Image>
-      </View>
-
-    )
-  }
 }
 
 
