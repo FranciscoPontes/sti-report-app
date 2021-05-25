@@ -46,8 +46,19 @@ const EcraInicial = props => {
                 Pedidos em Análise
             </Text>
 
-            <ScrollView>
-                <Record text={'FU'}/>
+            <ScrollView style={{marginBottom: 180}} >
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
+                <Record />
             </ScrollView>
         </View >
     )
@@ -80,17 +91,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flexWrap: 'wrap',
         paddingHorizontal: 12,
-    },
-
-    process: {
-        backgroundColor: '#FFF',
-        padding: 15,
-        marginHorizontal: 10,
-        borderRadius: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: 20,
     },
 })
 
