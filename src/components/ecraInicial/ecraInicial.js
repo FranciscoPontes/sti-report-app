@@ -48,6 +48,7 @@ const EcraInicial = props => {
 
             <ScrollView style={{marginBottom: 180}} >
                 <Record />
+{/*                 <Record />
                 <Record />
                 <Record />
                 <Record />
@@ -57,8 +58,7 @@ const EcraInicial = props => {
                 <Record />
                 <Record />
                 <Record />
-                <Record />
-                <Record />
+                <Record /> */}
             </ScrollView>
         </View >
     )
