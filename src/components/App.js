@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Header, Item } from 'react-native-elements';
@@ -7,13 +7,11 @@ import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
 import Report from '../components/ecraReport/report';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
-import { Button } from 'react-native';
+import { Button, Text } from 'native-base';
 
 import * as FirebaseAPI from '../../services/firebaseAPI';
 
 import * as Google from 'expo-auth-session/providers/google';
-import color from 'color';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   header: {
@@ -23,7 +21,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     ...StyleSheet.absoluteFillObject,
     position: 'absolute',
-    top: '50%'
+    top: '45%',
   }
 });
 
@@ -51,30 +49,51 @@ const App = () => {
   useEffect(() => {
     const tryLogin = async () => response?.type === 'success' ? setUser(await FirebaseAPI.login(response)) : null;
     tryLogin();
+    
   }, [response]);
 
-  useEffect(() => FirebaseAPI.startFirebase(), [])
+  useEffect(() => {
+    FirebaseAPI.startFirebase()
+  }, [])
 
   return (
     !user ?
-      <View style={styles.buttonsContainer}>
-        <Button
-          disabled={!request}
-          title="Google Sign-In"
-          onPress={() => {
-            promptAsync();
-          }}
-        />
-        <Button
-          disabled={!request}
-          title="Login (test user)"
-          onPress={ async () => {
-            FirebaseAPI.changeUserData(testData);
-            await FirebaseAPI.addUser(testData);
-            setUser(FirebaseAPI.userData);
-            }}
-        />
-      </View>
+      <Fragment>
+        <Header style={styles.header}
+        centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 15 } }}
+      />
+        <View style={styles.buttonsContainer}>  	
+          <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
+            <Button
+              style={{ minWidth: '70%', justifyContent: 'center' }}
+              disabled={!request}
+              rounded
+              primary
+              onPress={() => {
+                promptAsync();
+              }}
+            >
+              <Text style={{ color: 'white' }}>Google Login</Text>
+            </Button>
+          </View>
+
+          <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
+            <Button
+                style={{ minWidth: '70%', maxWidth: '70%', justifyContent: 'center' }}
+                disabled={!request}
+                rounded
+                warning
+                onPress={ async () => {
+                  FirebaseAPI.changeUserData(testData);
+                  await FirebaseAPI.addUser(testData);
+                  setUser(FirebaseAPI.userData);
+                  }}
+            >
+              <Text style={{ color: 'white' }}>Login (test user)</Text>
+            </Button>
+          </View>
+        </View>
+      </Fragment>
       :
       <NavigationContainer>
         <Header style={styles.header}

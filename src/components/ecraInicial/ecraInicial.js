@@ -11,13 +11,14 @@ const EcraInicial = props => {
     const navigation = props.navigation;
     const [ userReports, setUserReports ] = useState([]);
     const [ refreshing, setRefreshing ] = useState(false);
+
     const userData = API.userData;
     console.log(userData);
 
     const refreshData = async () => {
       console.log('refreshing..');
-      setRefreshing(true);
-      transformData(await API.getCurrentUserReports() );
+    //   setRefreshing(true);
+      await transformData(await API.getCurrentUserReports() );
       setRefreshing(false);
     }
 
@@ -48,29 +49,57 @@ const EcraInicial = props => {
     //   refreshData();
     // } ,[userData])
 
+    useEffect( () => refreshing ? refreshData() : null , [refreshing])
+
     return (
         <SafeAreaView>
           <ScrollView refreshControl={
             <RefreshControl 
               refreshing={refreshing}
-              onRefresh={refreshData}
+              onRefresh={() => setRefreshing(true)}
             />
           }>
             <Container>
                 <Grid style={{paddingTop: 15, alignItems: 'center', justifyContent: 'center'}}>
-                    <Row>
+                    <Row size={15}>
                         <Col>
-                            <Button light onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
+                            <Button light onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10, borderRadius: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
                         </Col>
                         <Col>
-                            <Button info onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10}}><Text>Report Lixo</Text></Button>
+                            <Button info onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10, borderRadius: 10}}><Text>Report Lixo</Text></Button>
+                        </Col>
+                    </Row>
+                    <Row size={75} style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%' }}>
+                        <Col style={{ }}>
+                            <Row style={{justifyContent: 'center' }} size={10}> 
+                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                                    Pedidos em Análise
+                                </Text>
+                            </Row>
+                            <Row style={{justifyContent: 'center' }} size={90}>
+                                <Record 
+                                        // triggerRefresh={refreshing} 
+                                        // refreshDone={() => setRefreshing(false)}
+                                        style={{ width: '100%' }} 
+                                        />
+                            </Row>
                         </Col>
                     </Row>
                 </Grid>
-                <Table data={userReports}/>
+                {/* <Grid style={{ width: '85%', alignSelf: 'center', backgroundColor: '#ece8e8'}}>
+                    <Row style={{ }}>
+                        <Text style={{ color: '#000', textAlign: 'center' }}>
+                            Pedidos em Análise
+                        </Text>
+                    </Row>
+                    <Row style={{ padding: 5}}>
+                            <Record />
+                    </Row>
+                </Grid> */}
+                {/* <Table data={userReports}/> */}
             </Container>
-            <View>
-            <View style={styles.rowz}>
+            {/* <View> */}
+            {/* <View style={styles.rowz}>
 
                 <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 0 } }) }}>
                     <Row style={styles.insideButton}>
@@ -100,27 +129,8 @@ const EcraInicial = props => {
                     </Row>
                 </Button>
 
-            </View>
-
-            <Text style={{ color: '#000', textAlign: 'center', paddingBottom: 20 }}>
-                Pedidos em Análise
-            </Text>
-
-            <ScrollView style={{marginBottom: 180}} >
-                <Record />
-{/*                 <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record />
-                <Record /> */}
-            </ScrollView>
-            </View >
+            </View> */}
+            {/* </View > */}
           </ScrollView>
         </SafeAreaView>
     )
