@@ -3,7 +3,6 @@ import { Container, Button, Text, View } from 'native-base';
 import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView  } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import * as API from '../../../services/firebaseAPI';
-import Table from '../ReportsTable';
 import * as Location from 'expo-location';
 import Record from './record';
 
@@ -13,55 +12,33 @@ const EcraInicial = props => {
     const [ refreshing, setRefreshing ] = useState(false);
 
     const userData = API.userData;
-    console.log(userData);
+    // console.log(userData);
 
     const refreshData = async () => {
       console.log('refreshing..');
-    //   setRefreshing(true);
-      await transformData(await API.getCurrentUserReports() );
+      setRefreshing(true);
+      const data = await API.getCurrentUserReports();
+      setUserReports(data);
       setRefreshing(false);
     }
 
-    const transformData = async data => {
-      // console.log(data);
-      const transformedData = await Promise.all( data.map( async val => await modifiedObj(val) ) )
-      // console.log(transformedData);
-      setUserReports(transformedData);
-    }
-
-    const modifiedObj = async data => {
-      console.log('modifying obj');
-      const city = await reverseCoord({
-        'latitude': data.latitude, 
-        'longitude': data.longitude
-      })
-      console.log('Obj modified city: ' + city);
-      return {...data, city: city};
-    }
- 
-    const reverseCoord = async location => await Location.reverseGeocodeAsync(location)
-                                        .then( response => response[0].city )
-                                        .catch( error => error.message )
-
-    // useEffect( () => () => {
-    //   console.log('---- use effect ----');
-    //   console.log(userData);
-    //   refreshData();
-    // } ,[userData])
-
-    useEffect( () => refreshing ? refreshData() : null , [refreshing])
+    useEffect( () => {
+      console.log('---- use effect ----');
+      console.log(userData);
+      refreshData();
+    }, [])
 
     return (
         <SafeAreaView>
           <ScrollView refreshControl={
             <RefreshControl 
               refreshing={refreshing}
-              onRefresh={() => setRefreshing(true)}
+              onRefresh={refreshData}
             />
           }>
             <Container>
-                <Grid style={{paddingTop: 15, alignItems: 'center', justifyContent: 'center'}}>
-                    <Row size={15}>
+                <Grid style={{paddingTop: 15, alignItems: 'center'}}>
+                    <Row size={5}>
                         <Col>
                             <Button light onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10, borderRadius: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
                         </Col>
@@ -69,20 +46,17 @@ const EcraInicial = props => {
                             <Button info onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10, borderRadius: 10}}><Text>Report Lixo</Text></Button>
                         </Col>
                     </Row>
-                    <Row size={75} style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%' }}>
-                        <Col style={{ }}>
-                            <Row style={{justifyContent: 'center' }} size={10}> 
-                                <Text style={{ fontSize: 20, fontWeight: 'bold' }}>
+                    <Row size={40} >
+                        <Col style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
+                                <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
                                     Pedidos em Análise
                                 </Text>
-                            </Row>
-                            <Row style={{justifyContent: 'center' }} size={90}>
-                                <Record 
-                                        // triggerRefresh={refreshing} 
-                                        // refreshDone={() => setRefreshing(false)}
-                                        style={{ width: '100%' }} 
-                                        />
-                            </Row>
+                            <View style={{ flexDirection: 'column' }} size={90}>
+                                { userReports ? 
+                                      userReports.map( (report, idx) => <Record data={report} key={idx}/> )
+                                    : <Text>You have not made any report</Text>
+                                }
+                            </View>
                         </Col>
                     </Row>
                 </Grid>
@@ -148,7 +122,7 @@ const styles = StyleSheet.create({
 
     button: {
         borderRadius: 10,
-        height: 80,
+        // height: 80,
         width: 170,
     },
 
