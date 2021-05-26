@@ -121,7 +121,8 @@ const EcraSummary = props => {
             typeOfAnimal: typeAnimal,
             typeOfTrash: typeOfTrash,
             user: API.userData.uid,
-            anonymousMode: anonymousMode
+            anonymousMode: anonymousMode,
+            additionalInfo: report.adicionalInfo
         };
         console.log(data);
         await API.addNewReport(data);
