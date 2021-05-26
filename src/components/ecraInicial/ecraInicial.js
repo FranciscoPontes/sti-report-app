@@ -38,14 +38,40 @@ const EcraInicial = props => {
           }>
             <Container>
                 <Grid style={{paddingTop: 15, alignItems: 'center'}}>
-                    <Row size={5}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 0 } }) }}>
+                            <Row style={styles.insideButton}>
+                                <Col style={{ alignItems: 'center' }}>
+                                    <Text style={styles.buttonText}>
+                                        New
+                                    </Text>
+                                </Col>
+                                <Image style={{ height: 50, width: 50 }} source={require('../../../assets/trash.png')}></Image>
+                            </Row>
+                        </Button>
+
+                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 1 } }) }}>
+                            <Row style={styles.insideButton}>
+                                <Col style={{ alignItems: 'center' }}>
+                                    <Text style={styles.buttonText}>
+                                        Novo
+                                    </Text>
+                                    <Text style={styles.buttonText}>
+                                        Pedido
+                                    </Text>
+                                </Col>
+                                <Image style={{ height: 40, width: 40 }} source={require('../../../assets/animal.png')}></Image>
+                            </Row>
+                        </Button>
+                    </View>
+                    {/* <Row size={5}>
                         <Col>
                             <Button light onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10, borderRadius: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
                         </Col>
                         <Col>
                             <Button info onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10, borderRadius: 10}}><Text>Report Lixo</Text></Button>
                         </Col>
-                    </Row>
+                    </Row> */}
                     <Row size={40} >
                         <Col style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
@@ -124,6 +150,9 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         // height: 80,
         width: 170,
+        // padding: '5%'
+        margin: '1%',
+        marginBottom: '3%'
     },
 
     buttonText: {

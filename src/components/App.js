@@ -7,7 +7,7 @@ import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button, Text } from 'native-base';
-import Report from '../components/ecraReport/ecraReport';
+import Report from '../components/ecraInicial/ecraReport';
 
 import * as FirebaseAPI from '../../services/firebaseAPI';
 
