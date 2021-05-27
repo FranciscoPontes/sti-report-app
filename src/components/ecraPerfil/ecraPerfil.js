@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Text, View } from 'native-base';
-import { ScrollView, Image, StyleSheet, Button  } from 'react-native';
+import { ScrollView, Image, StyleSheet, Button, Alert  } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { stopLocationUpdatesAsync } from 'expo-location';
 import * as FirebaseAPI from '../../../services/firebaseAPI';
+import { useIsFocused } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     profileImage: {
@@ -11,7 +13,7 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 100,
         overflow: "hidden",
-      
+         
     },
     container: { 
         flex:1,
@@ -36,41 +38,48 @@ const styles = StyleSheet.create({
   });
 
 
-const EcraPerfil = props => {
+const EcraPerfil = ({navigation}) => {
+  
     const userData = FirebaseAPI.userData; 
     const [reports, setReports] = useState([]);
     var result;
+    const BRONZE = 5;
+    const SILVER = 10;
+    const GOLD = 15;
 
     const ReportsCheck = async () => {  
-    const response = await FirebaseAPI.getCurrentUserReports();
-    console.log(response);
-    setReports(response);}
+        const response = await FirebaseAPI.getCurrentUserReports();
+        setReports(response);}
         
-    useEffect(() => { ReportsCheck();},[]);
-    console.log(reports.length)
 
-    const ProgressCheck = () => { if (reports.length <=5){ 
+    useEffect(() => {   
+        const unsubscribe = navigation.addListener('focus', () => {
+            ReportsCheck();});
+              return unsubscribe;
+            }, [navigation]);
+
+
+    const ProgressCheck = () => { if (reports.length <=BRONZE){ 
                 return <Text> {reports.length} / 5</Text>;
-            } else if(reports.length <= 10){ 
+            } else if(reports.length <= SILVER){ 
                 return <Text> {reports.length} / 10</Text>;
-            } else if(reports.length <= 15){ 
+            }  
                 return <Text> {reports.length} / 15</Text>;
-            }   return null;
         }
 
-    const BadgesCheck = () => { if (reports.length >=5 && reports.length <10){ 
+    const BadgesCheck = () => { if (reports.length >=BRONZE && reports.length <SILVER){ 
        
         return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/>        
                 </View>;
     } 
-        if(reports.length >=10 && reports.length <15){ 
+        if(reports.length >=SILVER && reports.length <GOLD){ 
         return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/>
                 <Image style={styles.profileImage} source={require('../../../assets/badgeSilver.png')}/>         
-                </View>;             
+                </View>;               
     } 
-        if(reports.length >=15){ 
+        if(reports.length >=GOLD){ 
 
         return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/>
@@ -82,7 +91,7 @@ const EcraPerfil = props => {
 }
         
     return (
-       
+        
         <SafeAreaView style={styles.container}>
             <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={{ uri: userData.photoURL }} />
@@ -101,8 +110,6 @@ const EcraPerfil = props => {
             <Text style={{alignSelf:"center"}}>Badges</Text>
             {BadgesCheck()}
   
-
-            <Button title="Reload" onPress={ReportsCheck}/>  
         </SafeAreaView>
        
     );
