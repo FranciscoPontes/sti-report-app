@@ -100,7 +100,7 @@ const App = () => {
           centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 15 } }}
         />
 
-        <Tab.Navigator>
+        <Tab.Navigator initialRouteName="Home">
           <Tab.Screen name="Home" component={EcraInicial} initialParams={{ user: user }}
             options={{
               tabBarIcon: ({ tintColor }) => (
@@ -120,6 +120,7 @@ const App = () => {
               )
             }} />
           <Tab.Screen name="Report" component={Report}
+            // initialParams={{showHistoryReport: true}}
             options={{
               tabBarIcon: ({ tintColor }) => (
                 <Image

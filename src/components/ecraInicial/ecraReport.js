@@ -7,9 +7,11 @@ import * as ImagePicker from 'expo-image-picker';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import ReportHistory from '../ecraReport/ecraReport';
 
 const EcraReport = props => {
-    const userChoice = props.route.params.reportType; // 0 -> Animais 1 -> Lixo
+    console.log(props);
+    const userChoice = props.route.params?.reportType; // 0 -> Animais 1 -> Lixo
     const navigation = props.navigation;
 
     const [image, setImage] = useState(null);
@@ -102,6 +104,7 @@ const EcraReport = props => {
     }
 
     return (
+        props.route.params ?
         <Container>
             <Content padder>
                 <Form>
@@ -315,6 +318,9 @@ const EcraReport = props => {
                 </Form>
             </Content>
         </Container>
+        :
+        <ReportHistory />
+
     )
 }
 

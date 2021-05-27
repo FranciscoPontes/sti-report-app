@@ -39,7 +39,7 @@ const EcraInicial = props => {
             <Container>
                 <Grid style={{paddingTop: 15, alignItems: 'center'}}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 0 } }) }}>
+                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Report', { reportType: 1, showHistoryReport: false } ) }}>
                             <Row style={styles.insideButton}>
                                 <Col style={{ alignItems: 'center' }}>
                                     <Text style={styles.buttonText}>
@@ -50,7 +50,7 @@ const EcraInicial = props => {
                             </Row>
                         </Button>
 
-                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 1 } }) }}>
+                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Report', { reportType: 0, showHistoryReport: false } ) }}>
                             <Row style={styles.insideButton}>
                                 <Col style={{ alignItems: 'center' }}>
                                     <Text style={styles.buttonText}>
