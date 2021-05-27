@@ -66,7 +66,7 @@ const ReportRecord = props => {
                 </View>
 
                 { data.status == PROCESSING_STATUS ? 
-                  <Image style={{ height: IMG_SIZE, width: IMG_SIZE, position: 'relative', left: '200%' }} source={require('../../../assets/loading.png')}></Image> : 
+                  <Image style={{ height: IMG_SIZE, width: IMG_SIZE }} source={require('../../../assets/loading.png')}></Image> : 
                   <Image style={{ height: IMG_SIZE, width: IMG_SIZE }} source={require('../../../assets/check.png')}></Image> 
                 }              
               </View>
@@ -85,7 +85,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
-    width: '75%'
+    marginRight: 20,
+    width: '100%'
   },
 });
 

@@ -34,23 +34,17 @@ const EcraHistorico = () => {
             onRefresh={refreshData}
           />
         }>
-          <Container>
-              <Grid style={{paddingTop: 15, alignItems: 'center'}}>
-                  <Row size={40} >
-                      <Col style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
-                              <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
-                                  Históricos de pedidos
-                              </Text>
-                          <View style={{ flexDirection: 'column' }} size={90}>
-                              { userReports ? 
-                                    userReports.map( (report, idx) => <Record data={report} key={idx} showAll={true}/> )
-                                  : <Text>You have not made any report</Text>
-                              }
-                          </View>
-                      </Col>
-                  </Row>
-              </Grid>
-          </Container>
+          <View style={{ alignItems: 'center', backgroundColor: '#ece8e8', padding: '5%', marginTop: '5%', marginBottom: '10%', borderRadius: 10, width: '85%', alignSelf: 'center' }}>
+                <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
+                    Históricos de pedidos
+                </Text>
+                <ScrollView style={{ flexDirection: 'column', width: '85%' }} nestedScrollEnabled>
+                  { userReports ? 
+                        userReports.map( (report, idx) => <Record data={report} key={idx}/> )
+                      : <Text>Não fez qualquer pedido</Text>
+                  }
+              </ScrollView>
+          </View>
         </ScrollView>
       </SafeAreaView>
     )

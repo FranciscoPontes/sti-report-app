@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Button, Text, View } from 'native-base';
-import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView  } from 'react-native';
+import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView, FlatList  } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import * as API from '../../../services/firebaseAPI';
 import * as Location from 'expo-location';
@@ -61,73 +61,21 @@ const EcraInicial = props => {
                             </Row>
                         </Button>
                     </View>
-                    {/* <Row size={5}>
-                        <Col>
-                            <Button light onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 0 }})}} style={{alignSelf: 'flex-end', marginRight: 10, borderRadius: 10}}><Text style={{color: "white"}}>Report Animal</Text></Button>
-                        </Col>
-                        <Col>
-                            <Button info onPress={() => {navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: 1 }})}} style={{paddingHorizontal: 10, borderRadius: 10}}><Text>Report Lixo</Text></Button>
-                        </Col>
-                    </Row> */}
-                    <Row size={40} >
+                    <Row style={{ marginTop: '5%', marginBottom: '5%' }}>
                         <Col style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
                                 <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
                                     Pedidos em Análise
                                 </Text>
-                            <View style={{ flexDirection: 'column' }} size={90}>
+                            <ScrollView style={{ flexDirection: 'column', width: '90%' }} nestedScrollEnabled>
                                 { userReports ? 
                                       userReports.map( (report, idx) => <Record data={report} key={idx}/> )
-                                    : <Text>You have not made any report</Text>
+                                    : <Text>Não fez qualquer pedido</Text>
                                 }
-                            </View>
+                            </ScrollView>
                         </Col>
                     </Row>
                 </Grid>
-                {/* <Grid style={{ width: '85%', alignSelf: 'center', backgroundColor: '#ece8e8'}}>
-                    <Row style={{ }}>
-                        <Text style={{ color: '#000', textAlign: 'center' }}>
-                            Pedidos em Análise
-                        </Text>
-                    </Row>
-                    <Row style={{ padding: 5}}>
-                            <Record />
-                    </Row>
-                </Grid> */}
-                {/* <Table data={userReports}/> */}
             </Container>
-            {/* <View> */}
-            {/* <View style={styles.rowz}>
-
-                <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 0 } }) }}>
-                    <Row style={styles.insideButton}>
-                        <Col style={{ alignItems: 'center' }}>
-                            <Text style={styles.buttonText}>
-                                Novo
-                            </Text>
-                            <Text style={styles.buttonText}>
-                                Pedido
-                            </Text>
-                        </Col>
-                        <Image style={{ height: 50, width: 50 }} source={require('../../../assets/trash.png')}></Image>
-                    </Row>
-                </Button>
-
-                <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Report', { screen: "ReportScreen", params: { reportType: 1 } }) }}>
-                    <Row style={styles.insideButton}>
-                        <Col style={{ alignItems: 'center' }}>
-                            <Text style={styles.buttonText}>
-                                Novo
-                            </Text>
-                            <Text style={styles.buttonText}>
-                                Pedido
-                            </Text>
-                        </Col>
-                        <Image style={{ height: 40, width: 40 }} source={require('../../../assets/animal.png')}></Image>
-                    </Row>
-                </Button>
-
-            </View> */}
-            {/* </View > */}
           </ScrollView>
         </SafeAreaView>
     )
