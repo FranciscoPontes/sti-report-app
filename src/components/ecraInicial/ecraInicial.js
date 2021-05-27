@@ -39,25 +39,22 @@ const EcraInicial = props => {
             <Container>
                 <Grid style={{paddingTop: 15, alignItems: 'center'}}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('New', { screen: 'ReportScreen', params: { reportType: 1 } } ) }}>
+                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: 1 } } ) }}>
                             <Row style={styles.insideButton}>
                                 <Col style={{ alignItems: 'center' }}>
                                     <Text style={styles.buttonText}>
-                                        New
+                                        Novo
                                     </Text>
                                 </Col>
                                 <Image style={{ height: 50, width: 50 }} source={require('../../../assets/trash.png')}></Image>
                             </Row>
                         </Button>
 
-                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('New', { screen: 'ReportScreen', params: { reportType: 0 } } ) }}>
+                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: 0 } } ) }}>
                             <Row style={styles.insideButton}>
                                 <Col style={{ alignItems: 'center' }}>
                                     <Text style={styles.buttonText}>
                                         Novo
-                                    </Text>
-                                    <Text style={styles.buttonText}>
-                                        Pedido
                                     </Text>
                                 </Col>
                                 <Image style={{ height: 40, width: 40 }} source={require('../../../assets/animal.png')}></Image>

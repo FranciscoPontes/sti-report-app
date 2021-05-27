@@ -9,8 +9,8 @@ import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 const EcraReport = props => {
-    console.log(props);
-    const userChoice = props.route.params?.reportType; // 0 -> Animais 1 -> Lixo
+    const userChoice = props.route.params.reportType; // 0 -> Animais 1 -> Lixo
+    const navigation = props.navigation;
 
     const [image, setImage] = useState(null);
     const [typeAnimal, setTypeAnimal] = useState(null);
@@ -315,7 +315,6 @@ const EcraReport = props => {
                 </Form>
             </Content>
         </Container>
-
     )
 }
 

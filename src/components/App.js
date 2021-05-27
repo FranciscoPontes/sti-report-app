@@ -7,8 +7,8 @@ import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button, Text } from 'native-base';
-import ReportNavigation from '../components/ecraInicial/home';
 import ecraHistorico from '../components/ecraHistorico/ecraHistorico';
+import Home from './ecraInicial/home';
 
 import * as FirebaseAPI from '../../services/firebaseAPI';
 
@@ -100,18 +100,29 @@ const App = () => {
         <Header style={styles.header}
           centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 15 } }}
         />
+        <Tab.Navigator>
+          <Tab.Screen name="Home" component={Home} initialParams={ { user } } 
+            options={{ unmountOnBlur: true, 
+                       title: 'Início',
+                       tabBarIcon: ({ tintColor }) => (
+                        <Image
+                          source={require('../../assets/navHome.png')}
+                          style={{ width: 26, height: 26, tintColor: tintColor }}
+                        />
+                      ) 
+                      }}
+            listeners={({ navigation, route }) => ({
+              tabPress: e => {
+                  // Prevent default action
+                  e.preventDefault();
 
-        <Tab.Navigator initialRouteName="Home">
-          <Tab.Screen name="Home" component={EcraInicial} initialParams={{ user: user }}
-            options={{
-              tabBarIcon: ({ tintColor }) => (
-                <Image
-                  source={require('../../assets/navHome.png')}
-                  style={{ width: 26, height: 26, tintColor: tintColor }}
-                />
-              )
-            }} />
-          <Tab.Screen name="Map" component={EcraMapa}
+                  // Do something with the `navigation` object
+                  navigation.navigate('Home', {
+                    screen: 'HomeScreen'
+                  });
+              },
+            })}/>
+          <Tab.Screen name="Mapa" component={EcraMapa}
             options={{
               tabBarIcon: ({ tintColor }) => (
                 <Image
@@ -120,18 +131,7 @@ const App = () => {
                 />
               )
             }} />
-          <Tab.Screen name="New" component={ReportNavigation}
-            // initialParams={{showHistoryReport: true}}
-            options={{
-              tabBarIcon: ({ tintColor }) => (
-                <Image
-                  source={require('../../assets/navReports.png')}
-                  style={{ width: 26, height: 26, tintColor: tintColor }}
-                />
-              )
-            }} />
-          <Tab.Screen name="History" component={ecraHistorico}
-            // initialParams={{showHistoryReport: true}}
+          <Tab.Screen name="Histórico" component={ecraHistorico}
             options={{
               tabBarIcon: ({ tintColor }) => (
                 <Image
