@@ -124,9 +124,9 @@ const EcraSummary = props => {
             anonymousMode: anonymousMode,
             additionalInfo: report.adicionalInfo
         };
-        console.log(data);
-        await API.addNewReport(data);
-        console.log('Data processed!');
+        let reportRef = await API.addNewReport(data);
+        console.log('Report done! ID: ' + reportRef.id);
+        await API.postImage(reportRef.id, report.image, report.isAnimalReport);
         navigation.navigate('ThanksScreen');
     }
 

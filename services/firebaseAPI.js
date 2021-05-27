@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import * as firebase from 'firebase';
 import "firebase/auth";
 import "firebase/firestore";
 
@@ -98,10 +98,10 @@ const getData = async ( collection, query = null ) => {
 
 const postToCollection = async ( collection, data, docId = null ) => {
     return !docId ?
-            await db.collection(collection).doc().set(data)
-                .then( response => {
+            await db.collection(collection).add((data))
+                .then( docRef => {
                     console.log('New post submitted!');
-                    return response; 
+                    return docRef; 
                 } )
                 .catch( error => error.message )
             :
@@ -113,10 +113,12 @@ const postToCollection = async ( collection, data, docId = null ) => {
             .catch( error => error.message )
 };
 
-const postImage = async ( uId, image ) => {
-    let storageRef = firebase.storage().ref();
-    let completeRef = storageRef.child('images/' + uId + '/' + image.name);
-    await completeRef.put(image).then().catch(error => console.error( error ) );
+export const postImage = async ( imageId, imageUrl, isAnimalReport) => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    var reportType = isAnimalReport ? "animals" : "trash";
+    const ref = firebase.storage().ref().child("images/" + reportType + "/" + imageId);
+    return ref.put(blob);
 };
 
 // used to login with test user

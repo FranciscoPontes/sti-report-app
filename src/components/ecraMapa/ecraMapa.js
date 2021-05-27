@@ -94,11 +94,11 @@ export default function Map(props){
           latitude: geoLocation.latitude,
           latitudeDelta: 0.03,
           longitudeDelta: 0.0121,
-      }, 1000);
+      }, 200);
   }
 
   const goToReport = (screen) => {
-    navigation.navigate('New', {screen: "ReportScreen", params: { reportType: screen }});
+    navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: screen }});
   }
 
   const toogleAnimalPins = () => {
@@ -216,7 +216,7 @@ export default function Map(props){
             active={createButtonStatus}
             direction="up"
             containerStyle={{}}
-            style={{ backgroundColor: "#000000", zIndex: 99 }}
+            style={{ backgroundColor: "rgb(70, 100, 255)", zIndex: 99 }}
             position="bottomRight"
             onPress={() => setCreateButtonStatus(!createButtonStatus)}>
             <Icon name="add"/>
