@@ -4,7 +4,7 @@ import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView  } from 're
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import * as API from '../../../services/firebaseAPI';
 import * as Location from 'expo-location';
-import Record from './record';
+import Record from '../ReportRecord/ReportRecord';
 
 const EcraInicial = props => {
     const navigation = props.navigation;
@@ -39,7 +39,7 @@ const EcraInicial = props => {
             <Container>
                 <Grid style={{paddingTop: 15, alignItems: 'center'}}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Report', { reportType: 1, showHistoryReport: false } ) }}>
+                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('New', { screen: 'ReportScreen', params: { reportType: 1 } } ) }}>
                             <Row style={styles.insideButton}>
                                 <Col style={{ alignItems: 'center' }}>
                                     <Text style={styles.buttonText}>
@@ -50,7 +50,7 @@ const EcraInicial = props => {
                             </Row>
                         </Button>
 
-                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Report', { reportType: 0, showHistoryReport: false } ) }}>
+                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('New', { screen: 'ReportScreen', params: { reportType: 0 } } ) }}>
                             <Row style={styles.insideButton}>
                                 <Col style={{ alignItems: 'center' }}>
                                     <Text style={styles.buttonText}>

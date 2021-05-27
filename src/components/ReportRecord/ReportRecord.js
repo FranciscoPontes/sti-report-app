@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import * as FirebaseAPI from '../../../services/firebaseAPI';
 import * as Location from 'expo-location';
 
-const record = props => {
+const ReportRecord = props => {
 
   // flag to show all or just the ones pending
   const showAll = props.showAll;
@@ -89,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default record;
+export default ReportRecord;

@@ -98,7 +98,7 @@ export default function Map(props){
   }
 
   const goToReport = (screen) => {
-    navigation.navigate('Report', {screen: "ReportScreen", params: { reportType: screen }});
+    navigation.navigate('New', {screen: "ReportScreen", params: { reportType: screen }});
   }
 
   const toogleAnimalPins = () => {

@@ -7,7 +7,8 @@ import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button, Text } from 'native-base';
-import Report from '../components/ecraInicial/ecraReport';
+import ReportNavigation from '../components/ecraInicial/home';
+import ecraHistorico from '../components/ecraHistorico/ecraHistorico';
 
 import * as FirebaseAPI from '../../services/firebaseAPI';
 
@@ -119,7 +120,17 @@ const App = () => {
                 />
               )
             }} />
-          <Tab.Screen name="Report" component={Report}
+          <Tab.Screen name="New" component={ReportNavigation}
+            // initialParams={{showHistoryReport: true}}
+            options={{
+              tabBarIcon: ({ tintColor }) => (
+                <Image
+                  source={require('../../assets/navReports.png')}
+                  style={{ width: 26, height: 26, tintColor: tintColor }}
+                />
+              )
+            }} />
+          <Tab.Screen name="History" component={ecraHistorico}
             // initialParams={{showHistoryReport: true}}
             options={{
               tabBarIcon: ({ tintColor }) => (
