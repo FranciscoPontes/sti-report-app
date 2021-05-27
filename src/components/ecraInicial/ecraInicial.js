@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button, Text, View } from 'native-base';
-import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView, FlatList  } from 'react-native';
-import { Col, Row, Grid } from 'react-native-easy-grid';
+import { Button, Text, View } from 'native-base';
+import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView  } from 'react-native';
 import * as API from '../../../services/firebaseAPI';
-import * as Location from 'expo-location';
 import Record from '../ReportRecord/ReportRecord';
 
 const EcraInicial = props => {
@@ -36,46 +34,40 @@ const EcraInicial = props => {
               onRefresh={refreshData}
             />
           }>
-            <Container>
-                <Grid style={{paddingTop: 15, alignItems: 'center'}}>
+            <View>
+                <View style={{paddingTop: 15, alignItems: 'center'}}>
                     <View style={{ flexDirection: 'row' }}>
-                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} onPress={() => { navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: 1 } } ) }}>
-                            <Row style={styles.insideButton}>
-                                <Col style={{ alignItems: 'center' }}>
-                                    <Text style={styles.buttonText}>
-                                        Novo
-                                    </Text>
-                                </Col>
-                                <Image style={{ height: 50, width: 50 }} source={require('../../../assets/trash.png')}></Image>
-                            </Row>
+                        <Button style={[styles.button, { backgroundColor: "#Daa900" }]} large onPress={() => { navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: 1 } } ) }}>
+                            <View style={styles.buttonContent}>
+                                <Text style={styles.buttonText}>
+                                    Novo
+                                </Text>
+                                <Image style={[styles.buttonIcon, { height: 50, width: 50 }]} source={require('../../../assets/trash.png')}></Image>
+                            </View>
                         </Button>
 
-                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} onPress={() => { navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: 0 } } ) }}>
-                            <Row style={styles.insideButton}>
-                                <Col style={{ alignItems: 'center' }}>
+                        <Button style={[styles.button, { backgroundColor: "#0582CA" }]} large onPress={() => { navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: 0 } } ) }}>
+                            <View style={styles.buttonContent}>
                                     <Text style={styles.buttonText}>
                                         Novo
                                     </Text>
-                                </Col>
-                                <Image style={{ height: 40, width: 40 }} source={require('../../../assets/animal.png')}></Image>
-                            </Row>
+                                <Image style={[styles.buttonIcon, { height: 35, width: 35 }]} source={require('../../../assets/animal.png')}></Image>
+                            </View>
                         </Button>
                     </View>
-                    <Row style={{ marginTop: '5%', marginBottom: '5%' }}>
-                        <Col style={{ backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
-                                <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
-                                    Pedidos em Análise
-                                </Text>
-                            <ScrollView style={{ flexDirection: 'column', width: '90%' }} nestedScrollEnabled>
-                                { userReports ? 
-                                      userReports.map( (report, idx) => <Record data={report} key={idx}/> )
-                                    : <Text>Não fez qualquer pedido</Text>
-                                }
-                            </ScrollView>
-                        </Col>
-                    </Row>
-                </Grid>
-            </Container>
+                    <View style={{ marginTop: '5%', marginBottom: '5%', backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
+                            Pedidos em Análise
+                        </Text>
+                        <View style={{ flexDirection: 'column', width: '90%' }}>
+                            { userReports.length !== 0 ? 
+                                    userReports.map( (report, idx) => <Record data={report} key={idx}/> )
+                                : <Text style={{ alignSelf: 'center' }}>Não fez qualquer pedido</Text>
+                            }
+                        </View>
+                    </View>
+                </View>
+            </View>
           </ScrollView>
         </SafeAreaView>
     )
@@ -93,11 +85,9 @@ const styles = StyleSheet.create({
 
     button: {
         borderRadius: 10,
-        // height: 80,
-        width: 170,
-        // padding: '5%'
         margin: '1%',
-        marginBottom: '3%'
+        marginBottom: '3%',
+        maxWidth: '30%'
     },
 
     buttonText: {
@@ -106,12 +96,16 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
 
-    insideButton: {
+    buttonContent: {
         alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
+        justifyContent: 'center',
+        flexDirection: 'row',
         paddingHorizontal: 12,
     },
+
+    buttonIcon: {
+        alignSelf: 'stretch'
+    }
 })
 
 export default EcraInicial;

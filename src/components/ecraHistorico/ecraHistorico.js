@@ -5,12 +5,13 @@ import { Col, Row, Grid } from 'react-native-easy-grid';
 import * as API from '../../../services/firebaseAPI';
 import Record from '../ReportRecord/ReportRecord';
 
-const EcraHistorico = () => {
+const EcraHistorico = props => {
     const [ userReports, setUserReports ] = useState([]);
     const [ refreshing, setRefreshing ] = useState(false);
 
     const userData = API.userData;
     // console.log(userData);
+    const navigation = props.navigation;
 
     const refreshData = async () => {
       console.log('refreshing..');
@@ -26,6 +27,14 @@ const EcraHistorico = () => {
       refreshData();
     }, [])
 
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        refreshData();
+      });
+      
+      return unsubscribe;
+    }, [navigation]);
+
     return (
         <SafeAreaView>
         <ScrollView refreshControl={
@@ -39,10 +48,10 @@ const EcraHistorico = () => {
                     Históricos de pedidos
                 </Text>
                 <ScrollView style={{ flexDirection: 'column', width: '85%' }} nestedScrollEnabled>
-                  { userReports ? 
-                        userReports.map( (report, idx) => <Record data={report} key={idx}/> )
-                      : <Text>Não fez qualquer pedido</Text>
-                  }
+                { userReports.length !== 0 ? 
+                                    userReports.map( (report, idx) => <Record data={report} key={idx} showAll/> )
+                                : <Text style={{ alignSelf: 'center' }}>Não fez qualquer pedido</Text>
+                }
               </ScrollView>
           </View>
         </ScrollView>

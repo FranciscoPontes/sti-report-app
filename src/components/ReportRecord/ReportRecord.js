@@ -14,28 +14,36 @@ const ReportRecord = props => {
   const [ city, setCity ] = useState(null);
 
   const toDateTime = secs => {
-    var t = new Date(1970, 0, 1); // Epoch
+    var t = new Date(1970, 0, 1); 
     t.setSeconds(secs);
     return t;
   }
 
-  // const getReportCity = async location => {
-  //   console.log('--------------GOT THESE LOCATION--------------');
-  //   console.log(location);
-  //   console.log('----------------------------------------------');
-  //   const response = await Location.reverseGeocodeAsync(location)
-  //                                   .then( response => response[0].city )
-  //                                   .catch( error => error.message );
-  //   return response ? response : 'Unable to find city';
-  // }
+  const getReportCity = async location => {
+    // console.log('--------------GOT THESE LOCATION--------------');
+    // console.log(location);
+    // console.log('----------------------------------------------');
+    const response = await Location.reverseGeocodeAsync(location)
+                                    .then( response => response[0].city )
+                                    .catch( error => error.message );
+    return response ? response : 'Unable to find city';
+  }
 
-  // useEffect( () => async () => {
-  //     if (data.location) setCity( await getReportCity(data.location) );
-  //     return () => null;
-  //   }
-  //   , [props])
+  useEffect( () => {
+        const getLocation = async () => {
+        console.log(data);
+        if (city) return;
+        const location = {
+                          latitude: data.latitude,
+                          longitude: data.longitude,
+                        }
+        setCity( await getReportCity(location) );
+      }
+      getLocation();
+    }
+    , [])
 
-  // useEffect( () => console.log(city), [city])
+    useEffect( () => console.log(city), [city])
 
     // report data received
     //   "acessType": "",
@@ -60,9 +68,12 @@ const ReportRecord = props => {
             (
               <View style={styles.process}>
                 <View style={{ flexDirection: 'column' }}>
-                  <Text>{data.isAnimalReport ? 'Animal' : 'Lixo'}</Text>
+                  <Text>{data.isAnimalReport ? data.typeOfAnimal : data.typeOfTrash}</Text>
+                  { data.extractionType ? <Text>{data.extractionType}</Text> : null }
+                  { data.acessType ? <Text>{data.acessType}</Text> : null }
                   <Text>{toDateTime(data.submissionDate.seconds).toLocaleDateString("en-US")}</Text>
-                  {/* <Text>{city}</Text> */}
+                  <Text>{city}</Text>
+                  <Text><Text style={{ fontWeight: 'bold' }}>Comentário: </Text>{data.additionalInfo}</Text>
                 </View>
 
                 { data.status == PROCESSING_STATUS ? 
