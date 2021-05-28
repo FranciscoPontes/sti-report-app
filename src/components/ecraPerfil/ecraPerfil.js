@@ -6,6 +6,8 @@ import { stopLocationUpdatesAsync } from 'expo-location';
 import * as FirebaseAPI from '../../../services/firebaseAPI';
 import { useIsFocused } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
+import { PanResponder } from 'react-native';
+
 
 const styles = StyleSheet.create({
     profileImage: {
@@ -42,14 +44,29 @@ const EcraPerfil = ({navigation}) => {
   
     const userData = FirebaseAPI.userData; 
     const [reports, setReports] = useState([]);
+    const [animalReports, setAnimalReports] = useState([]);
+    const [junkReports, setJunkReports] = useState([]);
+
+
     var result;
-    const BRONZE = 5;
-    const SILVER = 10;
-    const GOLD = 15;
+    const BRONZE = 250;
+    const SILVER = 500;
+    const GOLD = 1000;
 
     const ReportsCheck = async () => {  
         const response = await FirebaseAPI.getCurrentUserReports();
-        setReports(response);}
+        setReports(response);
+
+        const resultAnimals = response.filter(response => response.isAnimalReport === true);
+        setAnimalReports(resultAnimals.length);
+        console.log(resultAnimals.length);
+
+        const resultJunk = response.filter(response => response.isAnimalReport === false);
+        setJunkReports(resultJunk.length);
+        console.log(resultJunk.length);
+
+
+    }
         
 
     useEffect(() => {   
@@ -59,15 +76,16 @@ const EcraPerfil = ({navigation}) => {
             }, [navigation]);
 
 
-    const ProgressCheck = () => { if (reports.length <=BRONZE){ 
-                return <Text> {reports.length} / 5</Text>;
+    const ProgressCheck = () => {
+        if (reports.length <=BRONZE){ 
+                return <Text> {reports.length} / {BRONZE}</Text>;
             } else if(reports.length <= SILVER){ 
-                return <Text> {reports.length} / 10</Text>;
+                return <Text> {reports.length} / {SILVER}</Text>;
             }  
-                return <Text> {reports.length} / 15</Text>;
+                return <Text> {reports.length} / {GOLD}</Text>;
         }
 
-    const BadgesCheck = () => { if (reports.length >=BRONZE && reports.length <SILVER){ 
+    const SpecialBadges = () => { if (reports.length >=BRONZE && reports.length <SILVER){ 
        
         return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/>        
@@ -89,10 +107,69 @@ const EcraPerfil = ({navigation}) => {
     }   return null;
 
 }
-        
+
+const NrReportsBadge = () => { if (reports.length >=5 && reports.length < 25){ 
+       
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+            <Image style={styles.profileImage} source={require('../../../assets/5Reports.png')}/>        
+            </View>;
+} 
+if (reports.length >=25 && reports.length < 50){ 
+       
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+            <Image style={styles.profileImage} source={require('../../../assets/5Reports.png')}/>        
+            <Image style={styles.profileImage} source={require('../../../assets/25Reports.png')}/>        
+            </View>;
+} 
+if (reports.length >=50 ){ 
+       
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+            <Image style={styles.profileImage} source={require('../../../assets/5Reports.png')}/>        
+            <Image style={styles.profileImage} source={require('../../../assets/25Reports.png')}/> 
+            <Image style={styles.profileImage} source={require('../../../assets/50Reports.png')}/> 
+            </View>;
+} 
+   return null;
+
+}
+
+
+const MissionBadges = () => { if (animalReports >=1 && junkReports == 0){ 
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+            <Image style={styles.profileImage} source={require('../../../assets/PetSavior.png')}/>        
+            </View>;
+} 
+if(junkReports >=1 && animalReports == 0 )
+{
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+    <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/>        
+    </View>;
+}
+if(junkReports >=1 && animalReports >=1 && reports.length >=10)
+{
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+    <Image style={styles.profileImage} source={require('../../../assets/PetSavior.png')}/>        
+    <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/>     
+    <Image style={styles.profileImage} source={require('../../../assets/ReportDuty.png')}/>           
+    </View>;
+
+}
+if(junkReports >=1 && animalReports >=1 )
+{
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+    <Image style={styles.profileImage} source={require('../../../assets/PetSavior.png')}/>        
+    <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/>        
+    </View>;
+}
+  return null;
+
+}
+
+    
     return (
         
         <SafeAreaView style={styles.container}>
+            <ScrollView>
             <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={{ uri: userData.photoURL }} />
                 <View style={{flexDirection:'column', justifyContent:'space-evenly'}}>
@@ -101,15 +178,28 @@ const EcraPerfil = ({navigation}) => {
                 </View> 
             </View>
 
-            <View>
+            <View style = {{padding : 25 }} >
             <View style={styles.progressBar}></View>
            {ProgressCheck()} 
-            <Text style={{alignSelf:"center"}}>{ 'Progresso'}</Text>
             </View> 
      
-            <Text style={{alignSelf:"center"}}>Badges</Text>
-            {BadgesCheck()}
-  
+            <Text style={{alignSelf:"center"}}>Recompensas</Text>
+            {SpecialBadges()}
+            {MissionBadges()}
+            {NrReportsBadge()} 
+            { reports.length !== 0 ? 
+                <View style={{ alignSelf: 'center', flexDirection: 'column', width: '90%', borderWidth: 1,
+                borderColor: "thistle",
+                borderRadius: 50, }              
+            }>
+                    <Text style={{ alignSelf: 'center' }}>{reports.length} Reports Submetidos no Total</Text> 
+                    <Text style={{ alignSelf: 'center' }}>{animalReports} Reports Submetidos do tipo animal</Text> 
+                    <Text style={{ alignSelf: 'center' }}>{junkReports} Reports Submetidos do tipo lixo</Text> 
+                </View>
+            : <Text style={{ alignSelf: 'center' }}>Nenhum report efetuado</Text>
+        }
+           
+        </ScrollView>
         </SafeAreaView>
        
     );
