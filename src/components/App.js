@@ -7,12 +7,16 @@ import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
 import { Button, Text } from 'native-base';
-import ecraHistorico from '../components/ecraHistorico/ecraHistorico';
+import TabHistorico from './ecraHistorico/tabHistorico';
 import Home from './ecraInicial/home';
 
 import * as FirebaseAPI from '../../services/firebaseAPI';
 
 import * as Google from 'expo-auth-session/providers/google';
+
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 const styles = StyleSheet.create({
   header: {
@@ -130,8 +134,8 @@ const App = () => {
                   style={{ width: 26, height: 26, tintColor: tintColor }}
                 />
               )
-            }} />
-          <Tab.Screen name="Histórico" component={ecraHistorico}
+            }}/>
+          <Tab.Screen name="Histórico" component={TabHistorico}
             options={{
               tabBarIcon: ({ tintColor }) => (
                 <Image
@@ -139,7 +143,18 @@ const App = () => {
                   style={{ width: 26, height: 26, tintColor: tintColor }}
                 />
               )
-            }} />
+            }}
+            listeners={({ navigation, route }) => ({
+              tabPress: e => {
+                  // Prevent default action
+                  e.preventDefault();
+
+                  // Do something with the `navigation` object
+                  navigation.navigate('Histórico', {
+                    screen: 'Historico'
+                  });
+              },
+            })}/>
           <Tab.Screen name="Perfil" component={EcraPerfil}
             options={{
               tabBarIcon: ({ tintColor }) => (

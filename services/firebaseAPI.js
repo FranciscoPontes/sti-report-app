@@ -71,8 +71,9 @@ const getData = async ( collection, query = null ) => {
         .then( querySnapshot => {
             let dataArray = [];
             querySnapshot.forEach( doc => {
-                // console.log(doc.id, " => ", doc.data());
-                dataArray.push(doc.data());
+                var docData = doc.data();
+                docData.id = doc.id;
+                dataArray.push(docData);
             });
             // console.log(dataArray);
             return dataArray;
@@ -86,8 +87,9 @@ const getData = async ( collection, query = null ) => {
     .then( querySnapshot => {
         let dataArray = [];
         querySnapshot.forEach( doc => {
-            // console.log(doc.id, " => ", doc.data());
-            dataArray.push(doc.data());
+            var docData = doc.data();
+            docData.id = doc.id;
+            dataArray.push(docData);
         });
         return dataArray;
     })
@@ -121,6 +123,13 @@ export const postImage = async ( imageId, imageUrl, isAnimalReport) => {
     return ref.put(blob);
 };
 
+export const getImage = async ( reportId, isAnimalReport) => {
+    var reportType = isAnimalReport ? "animals" : "trash";
+    const ref = firebase.storage().ref("images/" + reportType + "/" + reportId);
+    const downloadURL = await ref.getDownloadURL();
+    return downloadURL;
+};
+
 // used to login with test user
 export const changeUserData = data => userData = data;
 
@@ -141,6 +150,10 @@ export const addUser = async () => {
 export const getAllReports = async () => await getData(REPORT_COLLECTION);
 
 export const getCurrentUserReports = async () => await getData(REPORT_COLLECTION, { attribute: 'user', comparator: '==', value: userData.uid} )
+
+export const getReport = async (reportId) => await getData(REPORT_COLLECTION, {attribute: firebase.firestore.FieldPath.documentId(), comparator: '==', value: reportId});
+
+export const getUser = async (userId) => await getData(USER_COLLECTION, {attribute: 'uid', comparator: '==', value: userId});
 
 export const addNewReport = async data => {
     // TODO: process images

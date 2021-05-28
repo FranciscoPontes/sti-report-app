@@ -14,7 +14,7 @@ const EcraHistorico = props => {
     const navigation = props.navigation;
 
     const refreshData = async () => {
-      console.log('refreshing..');
+      //console.log('refreshing..');
       setRefreshing(true);
       const data = await API.getCurrentUserReports();
       setUserReports(data);
@@ -22,8 +22,8 @@ const EcraHistorico = props => {
     }
 
     useEffect( () => {
-      console.log('---- use effect ----');
-      console.log(userData);
+      //console.log('---- use effect ----');
+      //console.log(userData);
       refreshData();
     }, [])
 

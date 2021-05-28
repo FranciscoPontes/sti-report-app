@@ -60,6 +60,10 @@ export default function Map(props){
   var animalMarkers = [];
   var trashMarkers = [];
 
+  async function getImage(reportId, isAnimalReport) {
+    let response = await API.getImage(reportId, isAnimalReport);
+  }
+
   useEffect(() => {
     async function getReports() {
       let response = await API.getAllReports();
@@ -99,6 +103,10 @@ export default function Map(props){
 
   const goToReport = (screen) => {
     navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: screen }});
+  }
+
+  const goToDetails = (idReport) => {
+    navigation.navigate('Histórico', { screen: 'Details', params: { reportId: idReport }});
   }
 
   const toogleAnimalPins = () => {
@@ -162,7 +170,7 @@ export default function Map(props){
       pinColor={marker.isAnimalReport ? "rgb(162, 208, 255)" : "orange"}
       opacity={marker.isAnimalReport ? animalPins : trashPins}
       >
-      <Callout tooltip={true}>
+      <Callout tooltip={true} onPress={() => goToDetails(marker.id)}>
           {
           marker.isAnimalReport ?
           <View style={animalCalloutStyle()}>
