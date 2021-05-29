@@ -11,7 +11,7 @@ import Marker from 'react-native-maps';
 const EcraDetails = props => {
 
     const currentUser = API.userData;
-
+    
     const [report, setReport] = useState({});
     const [reportImage, setReportImage] = useState(null);
     const [userOfReport, setUserOfReport] = useState(null);
@@ -38,7 +38,6 @@ const EcraDetails = props => {
             let responseThree = await API.getUser(currentUser.uid);
             responseThree = await responseThree[0];
             setCurrentUserData(responseThree);
-            console.log(responseThree)
             setContentLoaded(true);
         }
 
@@ -106,7 +105,7 @@ const EcraDetails = props => {
                                     <Text style={styles.headers}>Informação de visibilidade:</Text>
                                     <Text style={styles.information}>O utilizador submeteu este report em modo anónimo, apenas os administradores conseguem ver a sua origem</Text>
                                 </View> :
-                                currentUserData.uid === currentUser.uid ?
+                                currentUserData.uid === userOfReport.uid ?
                                 <View style={styles.userInfo}>
                                     <Text style={styles.headers}>Este report foi feito por ti próprio no entanto as tuas informações encontram-se ocultas para os outros utilizadores</Text>
                                 </View> : 
@@ -179,7 +178,7 @@ const EcraDetails = props => {
                                     <Text style={styles.headers}>Informação de visibilidade:</Text>
                                     <Text style={styles.information}>O utilizador submeteu este report em modo anónimo, apenas os administradores conseguem ver a sua origem</Text>
                                 </View> :
-                                currentUserData.uid === currentUser.uid ?
+                                currentUserData.uid === userOfReport.uid ?
                                 <View style={styles.userInfo}>
                                     <Text style={styles.headers}>Este report foi feito por ti próprio no entanto as tuas informações encontram-se ocultas para os outros utilizadores</Text>
                                 </View> : 

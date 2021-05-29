@@ -139,7 +139,7 @@ export const addUser = async () => {
     await docRef.get().then( async doc => {
         if (doc.exists) console.log("User already exists");
         else {
-            await postToCollection( USER_COLLECTION, {...userData, numberCompletedReports: 0 }, userData.uid );
+            await postToCollection( USER_COLLECTION, {...userData, numberCompletedReports: 0, admin: false }, userData.uid );
             console.log('User added');
         }
     }).catch( error => {
@@ -156,7 +156,6 @@ export const getReport = async (reportId) => await getData(REPORT_COLLECTION, {a
 export const getUser = async (userId) => await getData(USER_COLLECTION, {attribute: 'uid', comparator: '==', value: userId});
 
 export const addNewReport = async data => {
-    // TODO: process images
     return await postToCollection( REPORT_COLLECTION, data );
 }
 
