@@ -19,7 +19,8 @@ const EcraReport = props => {
     const [accessType, setAccessType] = useState(null);
     const [adicionalInfo, setAdicionalInfo] = useState("");
     const [anonymous, setAnonymous] = useState(false);
-    const [geoLocation, setGeoLocation] = useState({ latitude: 32.6592174, longitude: -16.9239346 });
+    const [currentLocation, setCurrentLocation] = useState({ latitude: 32.6592174, longitude: -16.9239346, latitudeDelta: 0.015, longitudeDelta: 0.0121 });
+    const [geoLocation, setGeoLocation] = useState(null);
 
     const [location, setLocation] = useState("");
 
@@ -47,6 +48,12 @@ const EcraReport = props => {
                             setGeoLocation( { 
                                 latitude: response.coords.latitude, 
                                 longitude: response.coords.longitude 
+                            });
+                            setCurrentLocation({
+                                latitude: response.coords.latitude, 
+                                longitude: response.coords.longitude,
+                                latitudeDelta: currentLocation.latitudeDelta,
+                                longitudeDelta: currentLocation.longitudeDelta
                             });
                         } )
                         .catch( error => console.log(error) )
@@ -278,20 +285,27 @@ const EcraReport = props => {
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
-                            region={{
-                                latitude: geoLocation.latitude,
-                                longitude: geoLocation.longitude,
-                                latitudeDelta: 0.015,
-                                longitudeDelta: 0.0121,
+                            region={currentLocation}
+                            onRegionChangeComplete={(region) => {
+                                setCurrentLocation(region);
                             }}
-                            onPress={(e) => {setGeoLocation({
-                                latitude: e.nativeEvent.coordinate.latitude, 
-                                longitude: e.nativeEvent.coordinate.longitude
-                            }); reverseCoord()}}
+                            onPress={(e) => {
+                                setGeoLocation({
+                                    latitude: e.nativeEvent.coordinate.latitude, 
+                                    longitude: e.nativeEvent.coordinate.longitude
+                                });
+                                setCurrentLocation({
+                                    latitude: e.nativeEvent.coordinate.latitude, 
+                                    longitude: e.nativeEvent.coordinate.longitude,
+                                    latitudeDelta: currentLocation.latitudeDelta,
+                                    longitudeDelta: currentLocation.longitudeDelta
+                                });
+                                reverseCoord();
+                            }}
                         >
                             {
-                                  geoLocation && reverseCoord() &&
-                                  <Marker coordinate={{ latitude : geoLocation.latitude , longitude : geoLocation.longitude }} />
+                                geoLocation && reverseCoord() &&
+                                <Marker coordinate={geoLocation} />
                             }
                         </MapView>
                     </View>
@@ -307,10 +321,20 @@ const EcraReport = props => {
                             <Switch value={anonymous} onValueChange={() => setAnonymous(!anonymous)} />
                         </Row>
                         <Row style={{paddingTop: 15}}>
-                            <Button info onPress={() => navigation.navigate('SummaryScreen', {
-                                image, typeAnimal, typeOfTrash, extractionType, accessType, adicionalInfo, anonymous, geoLocation, isAnimalReport: (userChoice === 0 ? true : false)
-                            })}><Text>Continuar</Text></Button>
+                            <Button
+                                info
+                                disabled={!image || (userChoice === 0 && !typeAnimal) || (userChoice === 1 && (!typeOfTrash || !extractionType || !accessType))}
+                                onPress={() => navigation.navigate('SummaryScreen', {
+                                    image, typeAnimal, typeOfTrash, extractionType, accessType, adicionalInfo, anonymous, geoLocation, isAnimalReport: (userChoice === 0 ? true : false)
+                                })}
+                            ><Text>Continuar</Text></Button>
                         </Row>
+                        {
+                            (!image || (userChoice === 0 && !typeAnimal) || (userChoice === 1 && (!typeOfTrash || !extractionType || !accessType))) &&
+                            <Row style={{paddingTop: 5}}>
+                                <Text style={{color: 'red'}}>Por favor preencha todos os campos obrigatórios.</Text>
+                            </Row>
+                        }
                     </Grid>
                 </Form>
             </Content>
