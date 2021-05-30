@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'native-base';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, TouchableHighlight } from 'react-native';
 import * as API from '../../../services/firebaseAPI';
 import { Image, Button } from "react-native";
 import { useIsFocused } from '@react-navigation/native'
@@ -11,7 +11,7 @@ import Marker from 'react-native-maps';
 const EcraDetails = props => {
 
     const currentUser = API.userData;
-    
+
     const [report, setReport] = useState({});
     const [reportImage, setReportImage] = useState(null);
     const [userOfReport, setUserOfReport] = useState(null);
@@ -46,6 +46,13 @@ const EcraDetails = props => {
         }
         
     } , [userFocused])
+
+    async function updateReportState(state) {
+        setContentLoaded(false);
+        await API.editReportState(report.id, state);
+        report.status = state;
+        setContentLoaded(true);
+    }
 
     return (
         contentLoaded ?
@@ -117,7 +124,11 @@ const EcraDetails = props => {
                             {currentUserData.admin ?
                             <View style={styles.adminInfo}>
                                 <Text style={styles.headers}>Ações disponíveis para este report enquanto administrador:</Text>
-                                {report.status == "processing" ? <Button onPress={() => console.log("Resolver")} title="Resolver"/> : report.status == "closed" ? <Button onPress={() => console.log("Reabrir")} title="Reabrir Report"/> : <Button onPress={() => console.log("Re-aceitar")} title="Re-aceitar"/>}
+                                {report.status == "processing" ? <Button onPress={() => updateReportState("closed")} title="Resolver"/> : null}
+                                {report.status == "processing" ? <View style={styles.separador} /> : null}
+                                {report.status == "processing" ? <Button onPress={() => updateReportState("rejected")} title="Rejeitar"/> : null}
+                                {report.status == "closed" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
+                                {report.status == "rejected" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
                             </View> : null
                             }
                         </View>
@@ -190,7 +201,11 @@ const EcraDetails = props => {
                             {currentUserData.admin ?
                             <View style={styles.adminInfo}>
                                 <Text style={styles.headers}>Ações disponíveis para este report enquanto administrador:</Text>
-                                {report.status == "processing" ? <Button onPress={() => console.log("Resolver")} title="Resolver"/> : report.status == "closed" ? <Button onPress={() => console.log("Reabrir")} title="Reabrir Report"/> : <Button onPress={() => console.log("Re-aceitar")} title="Re-aceitar"/>}
+                                {report.status == "processing" ? <Button onPress={() => updateReportState("closed")} title="Resolver"/> : null}
+                                {report.status == "processing" ? <View style={styles.separador} /> : null}
+                                {report.status == "processing" ? <Button onPress={() => updateReportState("rejected")} title="Rejeitar"/> : null}
+                                {report.status == "closed" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
+                                {report.status == "rejected" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
                             </View> : null
                             }
                         </View>
@@ -314,12 +329,17 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginLeft: 20,
         marginRight: 20,
-        padding: 15,
+        padding: 15
     },
     imageLoading:{
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    separador:{
+        marginVertical: 8,
+        borderBottomColor: '#737373',
+        borderBottomWidth: StyleSheet.hairlineWidth,
     }
 });
 

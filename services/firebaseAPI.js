@@ -123,6 +123,19 @@ export const postImage = async ( imageId, imageUrl, isAnimalReport) => {
     return ref.put(blob);
 };
 
+export const editReportState = async ( reportId, state) => {
+    var reportRef = db.collection(REPORT_COLLECTION).doc(reportId);
+    return reportRef.update({
+        status: state
+    })
+    .then(() => {
+        console.log("Report state updated");
+    })
+    .catch((error) => {
+        console.error("Error updating: ", error);
+    });
+};
+
 export const getImage = async ( reportId, isAnimalReport) => {
     var reportType = isAnimalReport ? "animals" : "trash";
     const ref = firebase.storage().ref("images/" + reportType + "/" + reportId);
@@ -154,6 +167,8 @@ export const getCurrentUserReports = async () => await getData(REPORT_COLLECTION
 export const getReport = async (reportId) => await getData(REPORT_COLLECTION, {attribute: firebase.firestore.FieldPath.documentId(), comparator: '==', value: reportId});
 
 export const getUser = async (userId) => await getData(USER_COLLECTION, {attribute: 'uid', comparator: '==', value: userId});
+
+export const getAllUsers = async () => await getData(USER_COLLECTION);
 
 export const addNewReport = async data => {
     return await postToCollection( REPORT_COLLECTION, data );

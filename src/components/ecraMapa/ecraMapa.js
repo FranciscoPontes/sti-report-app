@@ -51,7 +51,9 @@ export default function Map(props){
   const [trashPins, setTrashPins] = useState(1);
   const [animalPins, setAnimalPins] = useState(1);
   const [data, setData] = useState([]);
+  const [users, setUsers] = useState([]);
   const [createButtonStatus, setCreateButtonStatus] = useState(false);
+  const [usersLoaded, setUsersLoaded] = useState(false);
 
   const isFocused = useIsFocused()
   const navigation = props.navigation;
@@ -60,14 +62,18 @@ export default function Map(props){
   var animalMarkers = [];
   var trashMarkers = [];
 
-  async function getImage(reportId, isAnimalReport) {
-    let response = await API.getImage(reportId, isAnimalReport);
-  }
-
   useEffect(() => {
     async function getReports() {
+      setUsersLoaded(false);
       let response = await API.getAllReports();
       setData(response);
+      getUsers();
+    }
+
+    async function getUsers() {
+      let response = await API.getAllUsers();
+      setUsers(response);
+      setUsersLoaded(true);
     }
 
     async function findCoordinates() {
@@ -174,12 +180,14 @@ export default function Map(props){
           {
           marker.isAnimalReport ?
           <View style={animalCalloutStyle()}>
+            <Text>Utilizador: {marker.anonymousMode ? "Anónimo" : users.find(user => {return user.uid === marker.user}).displayName}</Text>
             <Text>Tipo de Animal: {marker.typeOfAnimal}</Text>
             {marker.status == "processing" ? <Text>Estado: Em processo</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : <Text>Estado: Recusado</Text>}
             <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
           </View>
           :
           <View style={trashCalloutStyle()}>
+            <Text>Utilizador: {marker.anonymousMode ? "Anónimo" : users.find(user => {return user.uid === marker.user}).displayName}</Text>
             <Text>Tipo de Lixo: {marker.typeOfTrash}</Text>
             {marker.status == "processing" ? <Text>Estado: Em processo</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : <Text>Estado: Recusado</Text>}
             <Text>Tipo de Extração: {marker.extractionType}</Text>
@@ -217,7 +225,7 @@ export default function Map(props){
           longitudeDelta: 0.0121
         }}
       >
-      {mapMarkers()}
+      {usersLoaded ? mapMarkers() : null}
       </MapView>
         <View style={{ flex: 1 }}>
           <Fab

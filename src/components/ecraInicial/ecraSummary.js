@@ -16,6 +16,7 @@ const EcraSummary = props => {
     const [extractionType, setExtractionType] = useState(null);
     const [accessType, setAccessType] = useState(null);
     const [anonymousMode, setAnonymousMode] = useState(report.anonymous);
+    const [contentLoaded, setContentLoaded] = useState(true);
 
     useEffect(() => {
         setDetails();
@@ -110,6 +111,7 @@ const EcraSummary = props => {
     };
 
     const sendNewReport = async () => {
+        setContentLoaded(false);
         const data = {
             accessType:  accessType,
             extractionType:  extractionType,
@@ -127,10 +129,12 @@ const EcraSummary = props => {
         let reportRef = await API.addNewReport(data);
         console.log('Report done! ID: ' + reportRef.id);
         await API.postImage(reportRef.id, report.image, report.isAnimalReport);
+        setContentLoaded(true);
         navigation.navigate('ThanksScreen');
     }
 
     return (
+        contentLoaded ?
         <Container>
             <Content padder>
                 <Text style={{textAlign: 'center'}}>Resumo do report</Text>
@@ -189,7 +193,11 @@ const EcraSummary = props => {
                     </Row>
                 </Grid>
             </Content>
-        </Container>
+        </Container> 
+        :
+        <View style={{flex: 1, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+            <Text style={styles.loadingMessage}>O conteúdo está a ser enviado para o servidor, por favor aguarde.</Text>
+        </View>
     )
 }
 
@@ -209,6 +217,12 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'center', 
         paddingTop: 5
+    },
+    loadingMessage:{
+        marginBottom: 10,
+        fontSize: 20,
+        fontWeight: "bold",
+        textAlign: "center",
     }
 });
 
