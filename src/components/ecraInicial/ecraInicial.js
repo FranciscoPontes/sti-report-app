@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Text, View } from 'native-base';
 import { Image, StyleSheet, RefreshControl, SafeAreaView, ScrollView  } from 'react-native';
+import { Picker as SelectPicker } from '@react-native-picker/picker';
 import * as API from '../../../services/firebaseAPI';
 import Record from '../ReportRecord/ReportRecord';
 
@@ -8,6 +9,9 @@ const EcraInicial = props => {
     const navigation = props.navigation;
     const [ userReports, setUserReports ] = useState([]);
     const [ refreshing, setRefreshing ] = useState(false);
+    const [ filteredData, setFilteredData ] = useState([]);
+    const [filterValue, setFilterValue] = useState('all');
+    
 
     const userData = API.userData;
     // console.log(userData);
@@ -16,9 +20,21 @@ const EcraInicial = props => {
       console.log('refreshing..');
       setRefreshing(true);
       const data = await API.getCurrentUserReports();
-      setUserReports(data);
+      setUserReports( orderDataByDateDescending( data ) );
       setRefreshing(false);
     }
+
+    const orderDataByDateDescending = data => data.sort( (a,b) => b.submissionDate - a.submissionDate )
+
+    const filterDataAccordingToSelectValue = () => {
+        if ( filterValue === 'all' ) return userReports;
+        if ( filterValue === 'animals' ) return userReports.filter( report => report.isAnimalReport );
+        return userReports.filter( report => !report.isAnimalReport );
+    }
+
+    useEffect( () => {
+        setFilteredData( filterDataAccordingToSelectValue() );
+    }, [userReports, filterValue])
 
     useEffect( () => {
       console.log('---- use effect ----');
@@ -57,12 +73,20 @@ const EcraInicial = props => {
                     </View>
                     <View style={{ marginTop: '5%', marginBottom: '5%', backgroundColor: '#ece8e8', padding: '5%', borderRadius: 10, width: '85%', alignItems: 'center' }}>
                         <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
-                            Pedidos em Análise
+                            Reports em Análise
                         </Text>
+                        <SelectPicker
+                            selectedValue={filterValue}
+                            style={{height: 50, width: 150 }}
+                            onValueChange={ itemValue => setFilterValue(itemValue) }>
+                            <SelectPicker.Item label="Todos" value="all" />
+                            <SelectPicker.Item label="Animais" value="animals" />
+                            <SelectPicker.Item label="Lixo" value="trash" />
+                        </SelectPicker>
                         <View style={{ flexDirection: 'column', width: '90%' }}>
-                            { userReports.length !== 0 ? 
-                                    userReports.map( (report, idx) => <Record data={report} key={idx}/> )
-                                : <Text style={{ alignSelf: 'center' }}>Não fez qualquer pedido</Text>
+                            { filteredData.length !== 0 ? 
+                                    filteredData.map( (report, idx) => <Record data={report} key={idx}/> )
+                                : <Text style={{ alignSelf: 'center' }}>Não fez qualquer report</Text>
                             }
                         </View>
                     </View>
