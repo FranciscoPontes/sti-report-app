@@ -4,26 +4,42 @@ import { RefreshControl, SafeAreaView, ScrollView  } from 'react-native';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import * as API from '../../../services/firebaseAPI';
 import Record from '../ReportRecord/ReportRecord';
+import { Picker as SelectPicker } from '@react-native-picker/picker';
 
 const EcraHistorico = props => {
     const [ userReports, setUserReports ] = useState([]);
     const [ refreshing, setRefreshing ] = useState(false);
+    const [ filteredData, setFilteredData ] = useState(userReports);
+    const [filterValue, setFilterValue] = useState('all');
 
     const userData = API.userData;
     // console.log(userData);
     const navigation = props.navigation;
+    const PROCESSING_STATUS = 'processing';
 
     const refreshData = async () => {
       console.log('refreshing..');
       setRefreshing(true);
       const data = await API.getCurrentUserReports();
-      setUserReports(data);
+      setUserReports( orderDataByDateDescending( data ) );
       setRefreshing(false);
     }
 
+    const orderDataByDateDescending = data => data.sort( (a,b) => b.submissionDate - a.submissionDate )
+
+    const filterDataAccordingToSelectValue = () => {
+      if ( filterValue === 'all' ) return userReports;
+      if ( filterValue === 'animals' ) return userReports.filter( report => report.isAnimalReport );
+      return userReports.filter( report => !report.isAnimalReport );
+  }
+
+  useEffect( () => {
+      setFilteredData( filterDataAccordingToSelectValue() );
+  }, [userReports, filterValue])
+
     useEffect( () => {
-      console.log('---- use effect ----');
-      console.log(userData);
+      //console.log('---- use effect ----');
+      //console.log(userData);
       refreshData();
     }, [])
 
@@ -45,12 +61,20 @@ const EcraHistorico = props => {
         }>
           <View style={{ alignItems: 'center', backgroundColor: '#ece8e8', padding: '5%', marginTop: '5%', marginBottom: '10%', borderRadius: 10, width: '85%', alignSelf: 'center' }}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
-                    Históricos de pedidos
+                    Histórico de reports
                 </Text>
+                <SelectPicker
+                            selectedValue={filterValue}
+                            style={{height: 50, width: 150 }}
+                            onValueChange={ itemValue => setFilterValue(itemValue) }>
+                            <SelectPicker.Item label="Todos" value="all" />
+                            <SelectPicker.Item label="Animais" value="animals" />
+                            <SelectPicker.Item label="Lixo" value="trash" />
+                </SelectPicker>
                 <ScrollView style={{ flexDirection: 'column', width: '85%' }} nestedScrollEnabled>
-                { userReports.length !== 0 ? 
-                                    userReports.map( (report, idx) => <Record data={report} key={idx} showAll/> )
-                                : <Text style={{ alignSelf: 'center' }}>Não fez qualquer pedido</Text>
+                { filteredData.filter( report => report.status !== PROCESSING_STATUS).length !== 0 ? 
+                                    filteredData.map( (report, idx) => <Record data={report} key={idx} showAll/> )
+                                : <Text style={{ alignSelf: 'center' }}>Nenhum report analisado </Text>
                 }
               </ScrollView>
           </View>

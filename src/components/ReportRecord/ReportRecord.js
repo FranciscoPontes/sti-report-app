@@ -31,7 +31,7 @@ const ReportRecord = props => {
 
   useEffect( () => {
         const getLocation = async () => {
-        console.log(data);
+        //console.log(data);
         if (city) return;
         const location = {
                           latitude: data.latitude,
@@ -43,7 +43,7 @@ const ReportRecord = props => {
     }
     , [])
 
-    useEffect( () => console.log(city), [city])
+    //useEffect( () => console.log(city), [city])
 
     // report data received
     //   "acessType": "",
@@ -64,8 +64,6 @@ const ReportRecord = props => {
     // data to show in the header: tipo, data, cidade, estado (icone)
 
     return (
-            !showAll && data.status !== PROCESSING_STATUS ? null : 
-            (
               <View style={styles.process}>
                 <View style={{ flexDirection: 'column' }}>
                   <Text>{data.isAnimalReport ? data.typeOfAnimal : data.typeOfTrash}</Text>
@@ -82,7 +80,6 @@ const ReportRecord = props => {
                 }              
               </View>
             )
-          )
 }
 
 

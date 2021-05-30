@@ -42,16 +42,27 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 99,
     marginBottom: 5
+  },
+  clickToOpen:{
+    color: 'blue',
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 5,
+    marginBottom: 0
   }
 });
 
 export default function Map(props){
   Moment.locale('pt');
+  const currentUser = API.userData;
   const [ geoLocation, setGeoLocation ] = useState( { latitude: 0, longitude: 0, });
   const [trashPins, setTrashPins] = useState(1);
   const [animalPins, setAnimalPins] = useState(1);
   const [data, setData] = useState([]);
+  const [users, setUsers] = useState([]);
   const [createButtonStatus, setCreateButtonStatus] = useState(false);
+  const [usersLoaded, setUsersLoaded] = useState(false);
+  const [currentUserData, setCurrentUserData] = useState(null);
 
   const isFocused = useIsFocused()
   const navigation = props.navigation;
@@ -62,8 +73,19 @@ export default function Map(props){
 
   useEffect(() => {
     async function getReports() {
+      setUsersLoaded(false);
       let response = await API.getAllReports();
       setData(response);
+      getUsers();
+    }
+
+    async function getUsers() {
+      let response = await API.getAllUsers();
+      setUsers(response);
+      let responseTwo = await API.getUser(currentUser.uid);
+      responseTwo = responseTwo[0];
+      setCurrentUserData(responseTwo);
+      setUsersLoaded(true);
     }
 
     async function findCoordinates() {
@@ -94,11 +116,15 @@ export default function Map(props){
           latitude: geoLocation.latitude,
           latitudeDelta: 0.03,
           longitudeDelta: 0.0121,
-      }, 1000);
+      }, 10);
   }
 
   const goToReport = (screen) => {
-    navigation.navigate('New', {screen: "ReportScreen", params: { reportType: screen }});
+    navigation.navigate('Home', { screen: 'ReportScreen', params: { reportType: screen }});
+  }
+
+  const goToDetails = (idReport) => {
+    navigation.navigate('Histórico', { screen: 'Details', params: { reportId: idReport }});
   }
 
   const toogleAnimalPins = () => {
@@ -152,35 +178,42 @@ export default function Map(props){
   }, [geoLocation])
 
   mapMarkers = () => {
-    return data.map((marker, index) => 
-      <Marker
-      key={index}
-      ref={ref => {marker.isAnimalReport ? animalMarkers[index] = ref : trashMarkers[index] = ref}}
-      coordinate={{ latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude) }}
-      title={marker.isAnimalReport ? marker.typeOfAnimal : marker.typeOfTrash}
-      description={"Descrição"}
-      pinColor={marker.isAnimalReport ? "rgb(162, 208, 255)" : "orange"}
-      opacity={marker.isAnimalReport ? animalPins : trashPins}
-      >
-      <Callout tooltip={true}>
-          {
-          marker.isAnimalReport ?
-          <View style={animalCalloutStyle()}>
-            <Text>Tipo de Animal: {marker.typeOfAnimal}</Text>
-            {marker.status == "processing" ? <Text>Estado: Em processo</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : <Text>Estado: Recusado</Text>}
-            <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
-          </View>
-          :
-          <View style={trashCalloutStyle()}>
-            <Text>Tipo de Lixo: {marker.typeOfTrash}</Text>
-            {marker.status == "processing" ? <Text>Estado: Em processo</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : <Text>Estado: Recusado</Text>}
-            <Text>Tipo de Extração: {marker.extractionType}</Text>
-            <Text>Tipo de Acesso: {marker.accessType}</Text>
-            <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
-          </View>
-          }
-      </Callout>
-      </Marker>) 
+    var dataToShow = currentUserData.admin ? data : data.filter(report => (report.status != "rejected" && report.status != "processing" && report.user != currentUserData.uid) || (report.user == currentUserData.uid));
+    return dataToShow.map((marker, index) => {
+      return (
+        <Marker
+        key={index}
+        ref={ref => {marker.isAnimalReport ? animalMarkers[index] = ref : trashMarkers[index] = ref}}
+        coordinate={{ latitude: parseFloat(marker.latitude), longitude: parseFloat(marker.longitude) }}
+        title={marker.isAnimalReport ? marker.typeOfAnimal : marker.typeOfTrash}
+        description={"Descrição"}
+        pinColor={marker.isAnimalReport ? "rgb(162, 208, 255)" : "orange"}
+        opacity={marker.isAnimalReport ? animalPins : trashPins}
+        >
+        <Callout tooltip={true} onPress={() => goToDetails(marker.id)}>
+            {
+            marker.isAnimalReport ?
+            <View style={animalCalloutStyle()}>
+              <Text>Utilizador: {marker.anonymousMode ? "Anónimo" : users.find(user => {return user.uid === marker.user}).displayName}</Text>
+              <Text>Tipo de Animal: {marker.typeOfAnimal}</Text>
+              {marker.status == "processing" ? <Text>Estado: Em processo (aguarda aprovação)</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : marker.status == "rejected" ? <Text>Estado: Recusado</Text> : <Text>Estado: Aprovado (aguarda resolução)</Text>}
+              <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
+              <Text style={styles.clickToOpen}>Clique para ver mais detalhes</Text>
+            </View>
+            :
+            <View style={trashCalloutStyle()}>
+              <Text>Utilizador: {marker.anonymousMode ? "Anónimo" : users.find(user => {return user.uid === marker.user}).displayName}</Text>
+              <Text>Tipo de Lixo: {marker.typeOfTrash}</Text>
+              {marker.status == "processing" ? <Text>Estado: Em processo (aguarda aprovação)</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : marker.status == "rejected" ? <Text>Estado: Recusado</Text> : <Text>Estado: Aprovado (aguarda resolução)</Text>}
+              <Text>Tipo de Extração: {marker.extractionType}</Text>
+              <Text>Tipo de Acesso: {marker.accessType}</Text>
+              <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
+              <Text style={styles.clickToOpen}>Clique para ver mais detalhes</Text>
+            </View>
+            }
+        </Callout>
+        </Marker>)
+    });
   }
   
   return (
@@ -201,7 +234,7 @@ export default function Map(props){
         showsUserLocation={true}
         ref={mapView}
         moveOnMarkerPress={false}
-        showsMyLocationButton={true}
+        showsMyLocationButton={false}
         initialRegion={{
           latitude: geoLocation.latitude,
           longitude: geoLocation.longitude,
@@ -209,14 +242,14 @@ export default function Map(props){
           longitudeDelta: 0.0121
         }}
       >
-      {mapMarkers()}
+      {usersLoaded ? mapMarkers() : null}
       </MapView>
         <View style={{ flex: 1 }}>
           <Fab
             active={createButtonStatus}
             direction="up"
             containerStyle={{}}
-            style={{ backgroundColor: "#000000", zIndex: 99 }}
+            style={{ backgroundColor: "rgb(70, 100, 255)", zIndex: 99 }}
             position="bottomRight"
             onPress={() => setCreateButtonStatus(!createButtonStatus)}>
             <Icon name="add"/>

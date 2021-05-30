@@ -1,4 +1,4 @@
-import firebase from 'firebase/app';
+import * as firebase from 'firebase';
 import "firebase/auth";
 import "firebase/firestore";
 
@@ -26,7 +26,7 @@ const USER_COLLECTION = 'users';
 //     typeOfAnimal: null,
 //     typeOfTrash: 'plastic', // plastic etc..
 //     submissionDate: new Date('2017-08-15'), // data atual
-//     status: 'processing' // processing, closed, rejected
+//     status: 'processing' // processing, approved, closed, rejected
 // }
 
 
@@ -71,8 +71,9 @@ const getData = async ( collection, query = null ) => {
         .then( querySnapshot => {
             let dataArray = [];
             querySnapshot.forEach( doc => {
-                // console.log(doc.id, " => ", doc.data());
-                dataArray.push(doc.data());
+                var docData = doc.data();
+                docData.id = doc.id;
+                dataArray.push(docData);
             });
             // console.log(dataArray);
             return dataArray;
@@ -86,8 +87,9 @@ const getData = async ( collection, query = null ) => {
     .then( querySnapshot => {
         let dataArray = [];
         querySnapshot.forEach( doc => {
-            // console.log(doc.id, " => ", doc.data());
-            dataArray.push(doc.data());
+            var docData = doc.data();
+            docData.id = doc.id;
+            dataArray.push(docData);
         });
         return dataArray;
     })
@@ -98,10 +100,10 @@ const getData = async ( collection, query = null ) => {
 
 const postToCollection = async ( collection, data, docId = null ) => {
     return !docId ?
-            await db.collection(collection).doc().set(data)
-                .then( response => {
+            await db.collection(collection).add((data))
+                .then( docRef => {
                     console.log('New post submitted!');
-                    return response; 
+                    return docRef; 
                 } )
                 .catch( error => error.message )
             :
@@ -113,10 +115,32 @@ const postToCollection = async ( collection, data, docId = null ) => {
             .catch( error => error.message )
 };
 
-const postImage = async ( uId, image ) => {
-    let storageRef = firebase.storage().ref();
-    let completeRef = storageRef.child('images/' + uId + '/' + image.name);
-    await completeRef.put(image).then().catch(error => console.error( error ) );
+export const postImage = async ( imageId, imageUrl, isAnimalReport) => {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    var reportType = isAnimalReport ? "animals" : "trash";
+    const ref = firebase.storage().ref().child("images/" + reportType + "/" + imageId);
+    return ref.put(blob);
+};
+
+export const editReportState = async ( reportId, state) => {
+    var reportRef = db.collection(REPORT_COLLECTION).doc(reportId);
+    return reportRef.update({
+        status: state
+    })
+    .then(() => {
+        console.log("Report state updated");
+    })
+    .catch((error) => {
+        console.error("Error updating: ", error);
+    });
+};
+
+export const getImage = async ( reportId, isAnimalReport) => {
+    var reportType = isAnimalReport ? "animals" : "trash";
+    const ref = firebase.storage().ref("images/" + reportType + "/" + reportId);
+    const downloadURL = await ref.getDownloadURL();
+    return downloadURL;
 };
 
 // used to login with test user
@@ -128,7 +152,7 @@ export const addUser = async () => {
     await docRef.get().then( async doc => {
         if (doc.exists) console.log("User already exists");
         else {
-            await postToCollection( USER_COLLECTION, {...userData, numberCompletedReports: 0 }, userData.uid );
+            await postToCollection( USER_COLLECTION, {...userData, numberCompletedReports: 0, admin: false }, userData.uid );
             console.log('User added');
         }
     }).catch( error => {
@@ -140,8 +164,13 @@ export const getAllReports = async () => await getData(REPORT_COLLECTION);
 
 export const getCurrentUserReports = async () => await getData(REPORT_COLLECTION, { attribute: 'user', comparator: '==', value: userData.uid} )
 
+export const getReport = async (reportId) => await getData(REPORT_COLLECTION, {attribute: firebase.firestore.FieldPath.documentId(), comparator: '==', value: reportId});
+
+export const getUser = async (userId) => await getData(USER_COLLECTION, {attribute: 'uid', comparator: '==', value: userId});
+
+export const getAllUsers = async () => await getData(USER_COLLECTION);
+
 export const addNewReport = async data => {
-    // TODO: process images
     return await postToCollection( REPORT_COLLECTION, data );
 }
 
