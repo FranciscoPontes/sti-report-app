@@ -70,7 +70,7 @@ const EcraDetails = props => {
                                 <Text style={styles.headers}>Informação adicional:</Text>
                                 <Text style={styles.information}>{report.additionalInfo}</Text>
                                 <Text style={styles.headers}>Estado do Report:</Text>
-                                {report.status == "processing" ? <Text style={styles.information}>Em processo</Text> : report.status == "closed" ? <Text style={styles.information}>Resolvido</Text> : <Text style={styles.information}>Recusado</Text>}
+                                {report.status == "processing" ? <Text style={styles.information}>Em processo (aguarda aprovação)</Text> : report.status == "closed" ? <Text style={styles.information}>Resolvido</Text> : report.status == "rejected" ? <Text style={styles.information}>Recusado</Text> : <Text style={styles.information}>Aprovado (aguarda resolução)</Text>}
                                 <Text style={styles.headers}>Coordenadas do report: </Text>
                                 <Text style={styles.information}>{report.latitude.toFixed(5)} , {report.longitude.toFixed(5)}</Text>
                                 <Text style={styles.headers}>Localização do mapa: </Text>
@@ -124,11 +124,14 @@ const EcraDetails = props => {
                             {currentUserData.admin ?
                             <View style={styles.adminInfo}>
                                 <Text style={styles.headers}>Ações disponíveis para este report enquanto administrador:</Text>
-                                {report.status == "processing" ? <Button onPress={() => updateReportState("closed")} title="Resolver"/> : null}
+                                {report.status == "processing" ? <Button onPress={() => updateReportState("approved")} title="Aprovar"/> : null}
                                 {report.status == "processing" ? <View style={styles.separador} /> : null}
                                 {report.status == "processing" ? <Button onPress={() => updateReportState("rejected")} title="Rejeitar"/> : null}
-                                {report.status == "closed" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
-                                {report.status == "rejected" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
+                                {report.status == "approved" ? <Button onPress={() => updateReportState("closed")} title="Resolver"/> : null}
+                                {report.status == "approved" ? <View style={styles.separador} /> : null}
+                                {report.status == "approved" ? <Button onPress={() => updateReportState("processing")} title="Reverter Aprovação"/> : null}
+                                {report.status == "closed" ? <Button onPress={() => updateReportState("approved")} title="Reverter Resolução"/> : null}
+                                {report.status == "rejected" ? <Button onPress={() => updateReportState("processing")} title="Reverter Rejeição"/> : null}
                             </View> : null
                             }
                         </View>
@@ -147,7 +150,7 @@ const EcraDetails = props => {
                                 <Text style={styles.headers}>Informação adicional:</Text>
                                 <Text style={styles.information}>{report.additionalInfo}</Text>
                                 <Text style={styles.headers}>Estado do Report:</Text>
-                                {report.status == "processing" ? <Text style={styles.information}>Em processo</Text> : report.status == "closed" ? <Text style={styles.information}>Resolvido</Text> : <Text style={styles.information}>Recusado</Text>}
+                                {report.status == "processing" ? <Text style={styles.information}>Em processo (aguarda aprovação)</Text> : report.status == "closed" ? <Text style={styles.information}>Resolvido</Text> : report.status == "rejected" ? <Text style={styles.information}>Recusado</Text> : <Text style={styles.information}>Aprovado (aguarda resolução)</Text>}
                                 <Text style={styles.headers}>Coordenadas do report: </Text>
                                 <Text style={styles.information}>{report.latitude.toFixed(5)} , {report.longitude.toFixed(5)}</Text>
                                 <Text style={styles.headers}>Localização do mapa: </Text>
@@ -201,11 +204,14 @@ const EcraDetails = props => {
                             {currentUserData.admin ?
                             <View style={styles.adminInfo}>
                                 <Text style={styles.headers}>Ações disponíveis para este report enquanto administrador:</Text>
-                                {report.status == "processing" ? <Button onPress={() => updateReportState("closed")} title="Resolver"/> : null}
+                                {report.status == "processing" ? <Button onPress={() => updateReportState("approved")} title="Aprovar"/> : null}
                                 {report.status == "processing" ? <View style={styles.separador} /> : null}
                                 {report.status == "processing" ? <Button onPress={() => updateReportState("rejected")} title="Rejeitar"/> : null}
-                                {report.status == "closed" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
-                                {report.status == "rejected" ? <Button onPress={() => updateReportState("processing")} title="Colocar Pendente"/> : null}
+                                {report.status == "approved" ? <Button onPress={() => updateReportState("closed")} title="Resolver"/> : null}
+                                {report.status == "approved" ? <View style={styles.separador} /> : null}
+                                {report.status == "approved" ? <Button onPress={() => updateReportState("processing")} title="Reverter Aprovação"/> : null}
+                                {report.status == "closed" ? <Button onPress={() => updateReportState("approved")} title="Reverter Resolução"/> : null}
+                                {report.status == "rejected" ? <Button onPress={() => updateReportState("processing")} title="Reverter Rejeição"/> : null}
                             </View> : null
                             }
                         </View>

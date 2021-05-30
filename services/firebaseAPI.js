@@ -26,7 +26,7 @@ const USER_COLLECTION = 'users';
 //     typeOfAnimal: null,
 //     typeOfTrash: 'plastic', // plastic etc..
 //     submissionDate: new Date('2017-08-15'), // data atual
-//     status: 'processing' // processing, closed, rejected
+//     status: 'processing' // processing, approved, closed, rejected
 // }
 
 
