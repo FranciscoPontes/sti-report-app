@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Text, View } from 'native-base';
-import { ScrollView, Image, StyleSheet, Button, Alert  } from 'react-native';
+import { ScrollView, Image, StyleSheet, Button, Alert, TouchableOpacity  } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { stopLocationUpdatesAsync } from 'expo-location';
 import * as FirebaseAPI from '../../../services/firebaseAPI';
@@ -8,6 +8,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { PanResponder } from 'react-native';
 import Animated, { Transition } from 'react-native-reanimated';
+import Popover from 'react-native-popover-view';
 
 
 const styles = StyleSheet.create({
@@ -16,6 +17,13 @@ const styles = StyleSheet.create({
         height: 120,
         borderRadius: 100,
         overflow: "hidden",
+    },
+
+    PopOverImage: {
+        width: 300,
+        height: 300,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     container: { 
@@ -73,30 +81,114 @@ const EcraPerfil = ({navigation}) => {
               return unsubscribe;
             }, [navigation]);
 
+    const BronzeBlur = () => { 
+        return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/badgeBronze.png')}/>        
+        </TouchableOpacity>)}>
+            <Image style={styles.PopOverImage} source={require('../../../assets/badgeBronze.png')}/>        
+            <Text style={{ alignSelf: 'center' }}>250 Reports Para Desbloquear</Text> 
+        </Popover>;
+        }
+    
+    const SilverBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/badgeSilver.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/badgeSilver.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>500 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+    
+    const GoldBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/badgeGold.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/badgeGold.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>1000 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const PetBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/PetSavior.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/PetSavior.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>1 Report Animal Para Desbloquear</Text> 
+    </Popover>;
+    }
+    
+    const JunkBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/EarthLover.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/EarthLover.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>1 Report Natureza Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const DutyBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/ReportDuty.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/ReportDuty.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>10 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const FiveBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/5Reports.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/5Reports.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>5 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const Twenty5Blur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/25Reports.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/25Reports.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>25 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const FiftyBlur = () => {return <Popover from={(
+        <TouchableOpacity>
+                <Image style={styles.profileImage} blurRadius={4} source={require('../../../assets/50Reports.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/50Reports.png')}/>        
+    <Text style={{ alignSelf: 'center' }}>50 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
 
     const ProgressCheck = () => {
         if (reports.length <=BRONZE){      
-            return <Text> {reports.length} / {BRONZE} </Text>;
+            return <Text style={{alignSelf:"center"}}> {reports.length} / {BRONZE} BRONZE</Text>;
             }
         if(reports.length <= SILVER){
-            return <Text> {reports.length} / {SILVER}</Text>;
+            return <Text style={{alignSelf:"center"}}> {reports.length} / {SILVER} SILVER</Text>;
             }  
         if(reports.length <= GOLD){
-            return <Text> {reports.length} / {GOLD}</Text>;
+            return <Text style={{alignSelf:"center"}}> {reports.length} / {GOLD} GOLD</Text>;
             }
-        return <Text> {GOLD} / {GOLD}</Text>;
-        }
+            return <Text style={{alignSelf:"center"}}> {GOLD} / {GOLD}</Text>;
+    }
 
-    const SpecialBadges = () => { 
+    const SpecialBadges = () => {
         if (reports.length >=BRONZE && reports.length <SILVER){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/>        
+                <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/> 
+                {SilverBlur()}
+                {GoldBlur()}       
                 </View>;
     } 
         if(reports.length >=SILVER && reports.length <GOLD){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/>
-                <Image style={styles.profileImage} source={require('../../../assets/badgeSilver.png')}/>         
+                <Image style={styles.profileImage} source={require('../../../assets/badgeSilver.png')}/>  
+                {GoldBlur()}       
                 </View>;               
     } 
         if(reports.length >=GOLD){ 
@@ -106,19 +198,27 @@ const EcraPerfil = ({navigation}) => {
                 <Image style={styles.profileImage} source={require('../../../assets/badgeGold.png')}/>       
                 </View>; 
     }   
-    return null;
+
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+                {BronzeBlur()}
+                {SilverBlur()}
+                {GoldBlur()}     
+            </View>;
     }
 
     const NrReportsBadge = () => { 
         if (reports.length >=5 && reports.length < 25){  
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.profileImage} source={require('../../../assets/5Reports.png')}/>        
+                <Image style={styles.profileImage} source={require('../../../assets/5Reports.png')}/>
+                {Twenty5Blur()}
+                {FiftyBlur()}        
                 </View>;
         } 
         if (reports.length >=25 && reports.length < 50){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 <Image style={styles.profileImage} source={require('../../../assets/5Reports.png')}/>        
-                <Image style={styles.profileImage} source={require('../../../assets/25Reports.png')}/>        
+                <Image style={styles.profileImage} source={require('../../../assets/25Reports.png')}/>
+                {FiftyBlur()}        
                 </View>;
         } 
         if (reports.length >=50 ){   
@@ -128,19 +228,27 @@ const EcraPerfil = ({navigation}) => {
                 <Image style={styles.profileImage} source={require('../../../assets/50Reports.png')}/> 
                 </View>;
         } 
-    return null;
-    }
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}> 
+                {FiveBlur()}
+                {Twenty5Blur()}
+                {FiftyBlur()}
+             </View>
+    ;}
 
 
     const MissionBadges = () => { 
         if (animalReports >=1 && junkReports == 0){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.profileImage} source={require('../../../assets/PetSavior.png')}/>        
+                <Image style={styles.profileImage} source={require('../../../assets/PetSavior.png')}/> 
+                {JunkBlur()}
+                {DutyBlur()}       
                 </View>;
         } 
         if(junkReports >=1 && animalReports == 0 ){
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/>        
+                {PetBlur()}
+                <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/>
+                {DutyBlur()}        
                 </View>;
         }
         if(junkReports >=1 && animalReports >=1 && reports.length >=10){
@@ -153,10 +261,15 @@ const EcraPerfil = ({navigation}) => {
         if(junkReports >=1 && animalReports >=1 ){
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
             <Image style={styles.profileImage} source={require('../../../assets/PetSavior.png')}/>        
-            <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/>        
+            <Image style={styles.profileImage} source={require('../../../assets/EarthLover.png')}/> 
+            {DutyBlur()}       
             </View>;
         }
-    return null;
+    return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
+                {PetBlur()}
+                {JunkBlur()}
+                {DutyBlur()}
+            </View>;;
     }
 
     const Barfill = () => {
@@ -192,9 +305,12 @@ const EcraPerfil = ({navigation}) => {
                 </View> 
      
                 <Text style={{alignSelf:"center"}}>Recompensas</Text>
+                
                 {SpecialBadges()}
                 {MissionBadges()}
-                {NrReportsBadge()} 
+                {NrReportsBadge()}
+            
+                
                 { reports.length !== 0 ? 
                     <View style={{ alignSelf: 'center', flexDirection: 'column', width: "90%", borderWidth: 1,
                     borderColor: "thistle",
