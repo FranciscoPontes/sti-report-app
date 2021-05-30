@@ -42,6 +42,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 99,
     marginBottom: 5
+  },
+  clickToOpen:{
+    color: 'blue',
+    fontSize: 14,
+    fontWeight: "bold",
+    marginTop: 5,
+    marginBottom: 0
   }
 });
 
@@ -191,6 +198,7 @@ export default function Map(props){
               <Text>Tipo de Animal: {marker.typeOfAnimal}</Text>
               {marker.status == "processing" ? <Text>Estado: Em processo (aguarda aprovação)</Text> : marker.status == "closed" ? <Text>Estado: Resolvido</Text> : marker.status == "rejected" ? <Text>Estado: Recusado</Text> : <Text>Estado: Aprovado (aguarda resolução)</Text>}
               <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
+              <Text style={styles.clickToOpen}>Clique para ver mais detalhes</Text>
             </View>
             :
             <View style={trashCalloutStyle()}>
@@ -200,6 +208,7 @@ export default function Map(props){
               <Text>Tipo de Extração: {marker.extractionType}</Text>
               <Text>Tipo de Acesso: {marker.accessType}</Text>
               <Text>Data de Submissão: {Moment.unix(marker.submissionDate.seconds).format("DD-MM-YYYY | HH:mm")}</Text>
+              <Text style={styles.clickToOpen}>Clique para ver mais detalhes</Text>
             </View>
             }
         </Callout>
