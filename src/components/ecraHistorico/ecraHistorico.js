@@ -14,14 +14,15 @@ const EcraHistorico = props => {
     const [ triggerChildRefresh, setTriggerChildRefresh ] = useState(false);
 
     const userData = API.userData;
-    // console.log(userData);
+    const isAdmin = API.userData.admin;
     const navigation = props.navigation;
     const PROCESSING_STATUS = 'processing';
 
     const refreshData = async () => {
       console.log('refreshing..');
       setRefreshing(true);
-      const data = await API.getCurrentUserReports();
+      console.log(isAdmin);
+      const data = !isAdmin ? await API.getCurrentUserReports() : await API.getAllReports();
       setUserReports( orderDataByDateDescending( data ) );
       setTriggerChildRefresh(true);
       setRefreshing(false);
@@ -35,13 +36,11 @@ const EcraHistorico = props => {
       return userReports.filter( report => !report.isAnimalReport );
   }
 
-  useEffect( () => {
-      setFilteredData( filterDataAccordingToSelectValue() );
-  }, [userReports, filterValue])
+    useEffect( () => {
+        setFilteredData( filterDataAccordingToSelectValue() );
+    }, [userReports, filterValue])
 
     useEffect( () => {
-      //console.log('---- use effect ----');
-      //console.log(userData);
       refreshData();
     }, [])
 
@@ -52,6 +51,7 @@ const EcraHistorico = props => {
       
       return unsubscribe;
     }, [navigation]);
+
 
     useEffect( () => {
       const timeoutRefresh = () => {
@@ -72,7 +72,7 @@ const EcraHistorico = props => {
         }>
           <View style={{ alignItems: 'center', backgroundColor: '#ece8e8', padding: '5%', marginTop: '5%', marginBottom: '10%', borderRadius: 10, width: '85%', alignSelf: 'center' }}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
-                    Histórico de reports
+                    { !isAdmin ? 'Histórico de reports' : 'Reports em análise' }
                 </Text>
                 <SelectPicker
                             selectedValue={filterValue}

@@ -37,12 +37,12 @@ const ReportRecord = props => {
                           latitude: data.latitude,
                           longitude: data.longitude,
                         }
-        console.log('----------------LOCATION--------------');
-        console.log(location);
+        // console.log('----------------LOCATION--------------');
+        // console.log(location);
         const response = await Location.reverseGeocodeAsync(location)
                                       .then( response => {
-                                        console.log('here');
-                                        console.log(response);
+                                        // console.log('here');
+                                        // console.log(response);
                                         return response[0].city;
                                       } )
                                       .catch( error => {

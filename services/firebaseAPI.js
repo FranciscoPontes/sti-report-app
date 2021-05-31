@@ -150,9 +150,13 @@ export const addUser = async () => {
     const docRef = db.collection(USER_COLLECTION).doc(userData.uid);
     
     await docRef.get().then( async doc => {
-        if (doc.exists) console.log("User already exists");
+        if (doc.exists) { 
+            userData = await isCurrentUserAdmin();
+            console.log("User already exists");
+        }
         else {
             await postToCollection( USER_COLLECTION, {...userData, numberCompletedReports: 0, admin: false }, userData.uid );
+            userData = {...userData, numberCompletedReports: 0, admin: false };
             console.log('User added');
         }
     }).catch( error => {
@@ -175,3 +179,8 @@ export const addNewReport = async data => {
 }
 
 export const updateCurrentUserData = async data => await postToCollection( USER_COLLECTION, data, userData.uid );
+
+const isCurrentUserAdmin = async () => {
+    const result = await getUser(userData.uid);
+    return {...userData, admin: result[0].admin};
+}
