@@ -11,6 +11,7 @@ const EcraHistorico = props => {
     const [ refreshing, setRefreshing ] = useState(false);
     const [ filteredData, setFilteredData ] = useState(userReports);
     const [filterValue, setFilterValue] = useState('all');
+    const [ triggerChildRefresh, setTriggerChildRefresh ] = useState(false);
 
     const userData = API.userData;
     // console.log(userData);
@@ -22,6 +23,7 @@ const EcraHistorico = props => {
       setRefreshing(true);
       const data = await API.getCurrentUserReports();
       setUserReports( orderDataByDateDescending( data ) );
+      setTriggerChildRefresh(true);
       setRefreshing(false);
     }
 
@@ -51,6 +53,15 @@ const EcraHistorico = props => {
       return unsubscribe;
     }, [navigation]);
 
+    useEffect( () => {
+      const timeoutRefresh = () => {
+          setTimeout( () => {
+              setTriggerChildRefresh(false);
+          }, 1200);
+      }
+      if (triggerChildRefresh) timeoutRefresh();
+    }, [triggerChildRefresh])
+
     return (
         <SafeAreaView>
         <ScrollView refreshControl={
@@ -73,7 +84,7 @@ const EcraHistorico = props => {
                 </SelectPicker>
                 <ScrollView style={{ flexDirection: 'column', width: '85%' }} nestedScrollEnabled>
                 { filteredData.filter( report => report.status !== PROCESSING_STATUS).length !== 0 ? 
-                                    filteredData.map( (report, idx) => <Record data={report} key={idx} showAll/> )
+                                    filteredData.filter( report => report.status !== PROCESSING_STATUS).map( (report, idx) => <Record data={report} key={idx} showAll refreshRequested={triggerChildRefresh} navigation={navigation}/> )
                                 : <Text style={{ alignSelf: 'center' }}>Nenhum report analisado </Text>
                 }
               </ScrollView>

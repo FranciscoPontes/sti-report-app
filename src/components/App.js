@@ -70,23 +70,25 @@ const App = () => {
         <View style={styles.buttonsContainer}>  	
           <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
             <Button
-              style={{ minWidth: '70%', justifyContent: 'center' }}
+              style={{ width: '45%' }}
               disabled={!request}
-              rounded
+              large
+              // rounded
               primary
               onPress={() => {
                 promptAsync();
               }}
             >
-              <Text style={{ color: 'white' }}>Google Login</Text>
+              <Text style={{ color: 'white', fontSize: 16 }}>Google Login</Text>
             </Button>
           </View>
 
           <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
             <Button
-                style={{ minWidth: '70%', maxWidth: '70%', justifyContent: 'center' }}
+                style={{ width: '45%' }}
                 disabled={!request}
-                rounded
+                large
+                // rounded
                 warning
                 onPress={ async () => {
                   FirebaseAPI.changeUserData(testData);
@@ -94,7 +96,7 @@ const App = () => {
                   setUser(FirebaseAPI.userData);
                   }}
             >
-              <Text style={{ color: 'white' }}>Login (test user)</Text>
+              <Text style={{ color: 'white', fontSize: 16 }}>Test account</Text>
             </Button>
           </View>
         </View>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, StyleSheet, Image, Button } from 'react-native';
 import * as FirebaseAPI from '../../../services/firebaseAPI';
 import * as Location from 'expo-location';
+import { atan } from 'react-native-reanimated';
 
 const ReportRecord = props => {
 
@@ -10,8 +11,15 @@ const ReportRecord = props => {
   const PROCESSING_STATUS = 'processing';
   const IMG_SIZE = 30;
  /*  const userData = FirebaseAPI.userData; */
-  const data = props.data;
+  const { data, refreshRequested, navigation } = props;
   const [ city, setCity ] = useState(null);
+
+  const recordStates = {
+    processing: 'Análise',
+    rejected: 'Rejeitado',
+    approved: 'Aprovado',
+    closed: 'Concluído',
+  }
 
   const toDateTime = secs => {
     var t = new Date(1970, 0, 1); 
@@ -19,31 +27,33 @@ const ReportRecord = props => {
     return t;
   }
 
-  const getReportCity = async location => {
-    // console.log('--------------GOT THESE LOCATION--------------');
-    // console.log(location);
-    // console.log('----------------------------------------------');
-    const response = await Location.reverseGeocodeAsync(location)
-                                    .then( response => response[0].city )
-                                    .catch( error => error.message );
-    return response ? response : 'Unable to find city';
+  const goToDetails = () => {
+    navigation.navigate('Histórico', { screen: 'Details', params: { reportId: data.id }});
   }
 
   useEffect( () => {
-        const getLocation = async () => {
-        //console.log(data);
-        if (city) return;
+      const getCity = async () => {
         const location = {
                           latitude: data.latitude,
                           longitude: data.longitude,
                         }
-        setCity( await getReportCity(location) );
+        console.log('----------------LOCATION--------------');
+        console.log(location);
+        const response = await Location.reverseGeocodeAsync(location)
+                                      .then( response => {
+                                        console.log('here');
+                                        console.log(response);
+                                        return response[0].city;
+                                      } )
+                                      .catch( error => {
+                                        console.log(error.message);
+                                        return error.message;
+                                      } );
+        setCity( response || 'Unable to find city' );
       }
-      getLocation();
+      if (refreshRequested && !city) getCity();
     }
-    , [])
-
-    //useEffect( () => console.log(city), [city])
+    , [refreshRequested])
 
     // report data received
     //   "acessType": "",
@@ -65,19 +75,31 @@ const ReportRecord = props => {
 
     return (
               <View style={styles.process}>
-                <View style={{ flexDirection: 'column' }}>
-                  <Text>{data.isAnimalReport ? data.typeOfAnimal : data.typeOfTrash}</Text>
-                  { data.extractionType ? <Text>{data.extractionType}</Text> : null }
-                  { data.acessType ? <Text>{data.acessType}</Text> : null }
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                  <Text><Text style={{ fontWeight: 'bold' }}>Tipo: </Text>{data.isAnimalReport ? 'Animal' : 'Lixo'}</Text>
                   <Text>{toDateTime(data.submissionDate.seconds).toLocaleDateString("en-US")}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                  <Text><Text style={{ fontWeight: 'bold' }}>Estado: </Text>{recordStates[data.status]}</Text>
                   <Text>{city}</Text>
-                  <Text><Text style={{ fontWeight: 'bold' }}>Comentário: </Text>{data.additionalInfo}</Text>
+                </View>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                    <Text>{data.isAnimalReport ? data.typeOfAnimal : data.typeOfTrash}</Text>
+                </View>
+                { data.additionalInfo ? 
+                  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-start', marginBottom: '5%' }}>
+                      <Text>{data.additionalInfo}</Text>
+                  </View>
+                  : null 
+                }
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
+                  <Button
+                    onPress={goToDetails}
+                    title="Ver detalhes"
+                    small
+                  />
                 </View>
 
-                { data.status == PROCESSING_STATUS ? 
-                  <Image style={{ height: IMG_SIZE, width: IMG_SIZE }} source={require('../../../assets/loading.png')}></Image> : 
-                  <Image style={{ height: IMG_SIZE, width: IMG_SIZE }} source={require('../../../assets/check.png')}></Image> 
-                }              
               </View>
             )
 }
@@ -89,7 +111,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 15,
     borderRadius: 10,
-    flexDirection: 'row',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginBottom: 20,
