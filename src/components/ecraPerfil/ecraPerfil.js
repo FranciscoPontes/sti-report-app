@@ -97,7 +97,8 @@ const styles = StyleSheet.create({
     logOutText:{
         fontSize: 18,
         textAlign: "center",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        color: "white"
     }
   });
 
