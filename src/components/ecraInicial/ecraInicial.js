@@ -11,16 +11,16 @@ const EcraInicial = props => {
     const [ refreshing, setRefreshing ] = useState(false);
     const [ filteredData, setFilteredData ] = useState([]);
     const [filterValue, setFilterValue] = useState('all');
-    
-
+    const [ triggerChildRefresh, setTriggerChildRefresh ] = useState(false);
     const userData = API.userData;
-    // console.log(userData);
+    const PROCESSING_STATUS = 'processing';
 
     const refreshData = async () => {
       console.log('refreshing..');
       setRefreshing(true);
       const data = await API.getCurrentUserReports();
-      setUserReports( orderDataByDateDescending( data ) );
+      setUserReports( orderDataByDateDescending( data.filter( report => report.status === PROCESSING_STATUS) ) );
+      setTriggerChildRefresh(true);
       setRefreshing(false);
     }
 
@@ -41,6 +41,15 @@ const EcraInicial = props => {
       console.log(userData);
       refreshData();
     }, [])
+
+    useEffect( () => {
+        const timeoutRefresh = () => {
+            setTimeout( () => {
+                setTriggerChildRefresh(false);
+            }, 1200);
+        }
+        if (triggerChildRefresh) timeoutRefresh();
+    }, [triggerChildRefresh])
 
     return (
         <SafeAreaView>
@@ -85,7 +94,7 @@ const EcraInicial = props => {
                         </SelectPicker>
                         <View style={{ flexDirection: 'column', width: '90%' }}>
                             { filteredData.length !== 0 ? 
-                                    filteredData.map( (report, idx) => <Record data={report} key={idx}/> )
+                                    filteredData.map( (report, idx) => <Record data={report} key={idx} refreshRequested={triggerChildRefresh} navigation={navigation}/> )
                                 : <Text style={{ alignSelf: 'center' }}>Não fez qualquer report</Text>
                             }
                         </View>
