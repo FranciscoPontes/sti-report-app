@@ -37,12 +37,12 @@ const ReportRecord = props => {
                           latitude: data.latitude,
                           longitude: data.longitude,
                         }
-        console.log('----------------LOCATION--------------');
-        console.log(location);
+        // console.log('----------------LOCATION--------------');
+        // console.log(location);
         const response = await Location.reverseGeocodeAsync(location)
                                       .then( response => {
-                                        console.log('here');
-                                        console.log(response);
+                                        // console.log('here');
+                                        // console.log(response);
                                         return response[0].city;
                                       } )
                                       .catch( error => {
@@ -75,20 +75,21 @@ const ReportRecord = props => {
 
     return (
               <View style={styles.process}>
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', margin: 5 }}>
                   <Text><Text style={{ fontWeight: 'bold' }}>Tipo: </Text>{data.isAnimalReport ? 'Animal' : 'Lixo'}</Text>
                   <Text>{toDateTime(data.submissionDate.seconds).toLocaleDateString("en-US")}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between', margin: 5 }}>
                   <Text><Text style={{ fontWeight: 'bold' }}>Estado: </Text>{recordStates[data.status]}</Text>
                   <Text>{city}</Text>
                 </View>
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-start', margin: 5 }}>
+                    <Text style={{fontWeight: "bold"}}>{data.isAnimalReport ? "Animal: " : "Lixo: "}</Text>
                     <Text>{data.isAnimalReport ? data.typeOfAnimal : data.typeOfTrash}</Text>
                 </View>
                 { data.additionalInfo ? 
-                  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-start', marginBottom: '5%' }}>
-                      <Text>{data.additionalInfo}</Text>
+                  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-start', marginBottom: '5%', flexShrink: 1 }}>
+                      <Text style={{marginVertical: 5, lineHeight: 20}}><Text style={{fontWeight: "bold"}}>Descrição: </Text>{data.additionalInfo}</Text>
                   </View>
                   : null 
                 }

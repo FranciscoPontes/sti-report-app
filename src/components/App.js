@@ -65,7 +65,7 @@ const App = () => {
     !user ?
       <Fragment>
         <Header style={styles.header}
-        centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 15 } }}
+        centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
       />
         <View style={styles.buttonsContainer}>  	
           <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
@@ -104,16 +104,31 @@ const App = () => {
       :
       <NavigationContainer>
         <Header style={styles.header}
-          centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 15 } }}
+          centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
         />
-        <Tab.Navigator>
+        {user.admin === false ?
+        <Tab.Navigator 
+          tabBarOptions={{
+          activeTintColor: 'white',
+          inactiveTintColor: 'black',
+          activeBackgroundColor: 'rgb(0, 100, 255)',
+          inactiveBackgroundColor: 'rgb(0, 120, 255)',
+          labelStyle: {
+            fontWeight: "bold",
+            fontSize: 12,
+            marginVertical: 5
+          },
+          style:{
+            height: 55
+          }
+        }}>
           <Tab.Screen name="Home" component={Home} initialParams={ { user } } 
             options={{ unmountOnBlur: true, 
                        title: 'Início',
                        tabBarIcon: ({ tintColor }) => (
                         <Image
                           source={require('../../assets/navHome.png')}
-                          style={{ width: 26, height: 26, tintColor: tintColor }}
+                          style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor }}
                         />
                       ) 
                       }}
@@ -133,7 +148,7 @@ const App = () => {
               tabBarIcon: ({ tintColor }) => (
                 <Image
                   source={require('../../assets/navLocation.png')}
-                  style={{ width: 26, height: 26, tintColor: tintColor }}
+                  style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor }}
                 />
               )
             }}/>
@@ -142,7 +157,7 @@ const App = () => {
               tabBarIcon: ({ tintColor }) => (
                 <Image
                   source={require('../../assets/navReports.png')}
-                  style={{ width: 26, height: 26, tintColor: tintColor }}
+                  style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor }}
                 />
               )
             }}
@@ -157,17 +172,66 @@ const App = () => {
                   });
               },
             })}/>
+          
           <Tab.Screen name="Perfil" component={EcraPerfil}
             options={{
               tabBarIcon: ({ tintColor }) => (
                 <Image
                   source={require('../../assets/navProfile.png')}
-                  style={{ width: 26, height: 26, tintColor: tintColor}}
+                  style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor}}
                 />
               )
             }} />
+            
         </Tab.Navigator>
-      </NavigationContainer>
+        :
+        <Tab.Navigator 
+        tabBarOptions={{
+        activeTintColor: 'white',
+        inactiveTintColor: 'black',
+        activeBackgroundColor: 'rgb(0, 100, 255)',
+        inactiveBackgroundColor: 'rgb(0, 120, 255)',
+        labelStyle: {
+          fontWeight: "bold",
+          fontSize: 12,
+          marginVertical: 5
+        },
+        style:{
+          height: 55
+        }
+      }}>
+        <Tab.Screen name="Mapa" component={EcraMapa}
+          options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Image
+                source={require('../../assets/navLocation.png')}
+                style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor }}
+              />
+            )
+          }}/>
+        <Tab.Screen name="Histórico" component={TabHistorico}
+          options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Image
+                source={require('../../assets/navReports.png')}
+                style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor }}
+              />
+            )
+          }}
+          listeners={({ navigation, route }) => ({
+            tabPress: e => {
+                // Prevent default action
+                e.preventDefault();
+
+                // Do something with the `navigation` object
+                navigation.navigate('Histórico', {
+                  screen: 'Historico'
+                });
+            },
+          })}/>    
+      </Tab.Navigator>
+          }
+      </NavigationContainer>     
   );
 }
 
