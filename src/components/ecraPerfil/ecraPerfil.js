@@ -101,12 +101,8 @@ const styles = StyleSheet.create({
     }
   });
 
-const logOut = () => {
-    console.log("Efetuar Logout")
-}
-
-const EcraPerfil = ({navigation}) => {
-  
+const EcraPerfil =  props => {
+    const navigation = props.navigation
     const userData = FirebaseAPI.userData; 
     const [reports, setReports] = useState([]);
     const [animalReports, setAnimalReports] = useState([]);
@@ -128,7 +124,11 @@ const EcraPerfil = ({navigation}) => {
         setJunkReports(resultJunk.length);
         console.log(resultJunk.length);
     }
-        
+
+    const logOut = async () => {
+        await FirebaseAPI.logout();
+        props.route.params.setUser(null);
+    }   
 
     useEffect(() => {   
         const unsubscribe = navigation.addListener('focus', () => {

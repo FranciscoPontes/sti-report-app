@@ -64,6 +64,12 @@ export const login = async (response) => {
                         .catch( error => error.message );
 };
 
+export const logout = async () => await firebase.auth().signOut().then(() => {
+                                                console.log('Signed out with success!')
+                                            }).catch( error => {
+                                                console.log(error.message);
+                                            });
+
 const getData = async ( collection, query = null ) => {
     if (!query) {
         return db.collection(collection)

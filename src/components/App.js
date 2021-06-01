@@ -177,7 +177,7 @@ const App = () => {
               },
             })}/>
           
-          <Tab.Screen name="Perfil" component={EcraPerfil}
+          <Tab.Screen name="Perfil" component={EcraPerfil} initialParams= {{ setUser: setUser }}
             options={{
               tabBarIcon: ({ tintColor }) => (
                 <Image
@@ -234,7 +234,7 @@ const App = () => {
             },
           })}/>    
 
-          <Tab.Screen name="Perfil" component={EcraPerfil}
+          <Tab.Screen name="Perfil" component={EcraPerfil} initialParams= {{ setUser: setUser }}
           options={{
             tabBarIcon: ({ tintColor }) => (
               <Image
