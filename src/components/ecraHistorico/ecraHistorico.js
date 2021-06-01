@@ -10,7 +10,8 @@ const EcraHistorico = props => {
     const [ userReports, setUserReports ] = useState([]);
     const [ refreshing, setRefreshing ] = useState(false);
     const [ filteredData, setFilteredData ] = useState(userReports);
-    const [filterValue, setFilterValue] = useState('all');
+    const [filterByType, setFilterByType] = useState('all');
+    const [filterByState, setFilterByState] = useState('all');
     const [ triggerChildRefresh, setTriggerChildRefresh ] = useState(false);
 
     const userData = API.userData;
@@ -30,15 +31,20 @@ const EcraHistorico = props => {
 
     const orderDataByDateDescending = data => data.sort( (a,b) => b.submissionDate - a.submissionDate )
 
-    const filterDataAccordingToSelectValue = () => {
-      if ( filterValue === 'all' ) return userReports;
-      if ( filterValue === 'animals' ) return userReports.filter( report => report.isAnimalReport );
-      return userReports.filter( report => !report.isAnimalReport );
-  }
+    const filterRecordsByType = () => {
+      if ( filterByType === 'all' ) return filterRecordsByStatus(userReports);
+      if ( filterByType === 'animals' ) return filterRecordsByStatus(userReports.filter( report => report.isAnimalReport ));
+      return filterRecordsByStatus( userReports.filter( report => !report.isAnimalReport ) );
+    }
+
+    const filterRecordsByStatus = data => {
+      if ( filterByState === 'all' ) return data;
+      return data.filter( report => report.status === filterByState );
+    }
 
     useEffect( () => {
-        setFilteredData( filterDataAccordingToSelectValue() );
-    }, [userReports, filterValue])
+        setFilteredData( filterRecordsByType() );
+    }, [userReports, filterByType, filterByState])
 
     useEffect( () => {
       refreshData();
@@ -72,20 +78,35 @@ const EcraHistorico = props => {
         }>
           <View style={{ alignItems: 'center', backgroundColor: '#ece8e8', padding: '5%', marginTop: '5%', marginBottom: '10%', borderRadius: 10, width: '85%', alignSelf: 'center' }}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold', paddingBottom: 10 }}>
-                    { !isAdmin ? 'Histórico de reports' : 'Reports em análise' }
+                    Histórico de reports
                 </Text>
                 <SelectPicker
-                            selectedValue={filterValue}
+                            selectedValue={filterByType}
                             style={{height: 50, width: 150 }}
-                            onValueChange={ itemValue => setFilterValue(itemValue) }>
+                            onValueChange={ itemValue => setFilterByType(itemValue) }>
                             <SelectPicker.Item label="Todos" value="all" />
                             <SelectPicker.Item label="Animais" value="animals" />
                             <SelectPicker.Item label="Lixo" value="trash" />
                 </SelectPicker>
+                <SelectPicker
+                            selectedValue={filterByState}
+                            style={{height: 50, width: 150 }}
+                            onValueChange={ itemValue => setFilterByState(itemValue) }>
+                            <SelectPicker.Item label="Todos" value="all" />
+                            {  userData.admin ? <SelectPicker.Item label="Análise" value="processing" /> : null }
+                            <SelectPicker.Item label="Rejeitado" value="rejected" />
+                            <SelectPicker.Item label="Aprovado" value="approved" />
+                            <SelectPicker.Item label="Concluído" value="closed" />
+                </SelectPicker>
                 <ScrollView style={{ flexDirection: 'column', width: '85%' }} nestedScrollEnabled>
-                { filteredData.filter( report => report.status !== PROCESSING_STATUS).length !== 0 ? 
+                {  !userData.admin ? ( filteredData.filter( report => report.status !== PROCESSING_STATUS).length !== 0 ? 
                                     filteredData.filter( report => report.status !== PROCESSING_STATUS).map( (report, idx) => <Record data={report} key={idx} showAll refreshRequested={triggerChildRefresh} navigation={navigation}/> )
-                                : <Text style={{ alignSelf: 'center' }}>Nenhum report analisado </Text>
+                                : <Text style={{ alignSelf: 'center', marginTop: 20 }}>Nenhum report</Text> )
+                    : (
+                      filteredData.length !== 0 ? 
+                                    filteredData.map( (report, idx) => <Record data={report} key={idx} showAll refreshRequested={triggerChildRefresh} navigation={navigation}/> )
+                                : <Text style={{ alignSelf: 'center', marginTop: 20 }}>Nenhum report</Text>
+                    )
                 }
               </ScrollView>
           </View>

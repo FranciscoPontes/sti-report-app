@@ -233,6 +233,17 @@ const App = () => {
                 });
             },
           })}/>    
+
+          <Tab.Screen name="Perfil" component={EcraPerfil}
+          options={{
+            tabBarIcon: ({ tintColor }) => (
+              <Image
+                source={require('../../assets/navProfile.png')}
+                style={{ width: 26, height: 26, marginTop: 10, tintColor: tintColor}}
+              />
+            )
+          }} />
+
       </Tab.Navigator>
           }
       </NavigationContainer>     

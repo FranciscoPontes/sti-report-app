@@ -5,11 +5,10 @@ import * as FirebaseAPI from '../../../services/firebaseAPI';
 import Animated from 'react-native-reanimated';
 import Popover from 'react-native-popover-view';
 
-
 const styles = StyleSheet.create({
     profileImage: {
-        width: 115,
-        height: 115,
+        width: 100,
+        height: 100,
         borderRadius: 25,
         overflow: "hidden",
         borderColor: "rgb(0,122,200)",
@@ -344,6 +343,7 @@ const EcraPerfil = ({navigation}) => {
     return (
         <ScrollView style={styles.mainScreen}>
             <View style={styles.container}>
+                { userData.admin ? <Text style={styles.headers}>Administrador</Text> : null }
                 <Text style={styles.headers}>Informações Pessoais</Text>
                 <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                     <Image style={styles.profileImage} source={{ uri: userData.photoURL }} />
@@ -363,24 +363,28 @@ const EcraPerfil = ({navigation}) => {
                     {ProgressCheck()} 
                 </View> 
                 <View style={styles.separador} />
-                <Text style={styles.headers}>Emblemas e Recompensas</Text>
-                
-                {SpecialBadges()}
-                {MissionBadges()}
-                {NrReportsBadge()}
+                { !userData.admin ?
+                <React.Fragment>
+                    <Text style={styles.headers}>Emblemas e Recompensas</Text>
+                    
+                    {SpecialBadges()}
+                    {MissionBadges()}
+                    {NrReportsBadge()}
 
-                <View style={styles.separador} />
-                <Text style={styles.headers}>Estatísticas do Utilizador</Text>
+                    <View style={styles.separador} />
+                    <Text style={styles.headers}>Estatísticas do Utilizador</Text>
 
-                { reports.length !== 0 ? 
-                    <View style={{ alignSelf: 'center', flexDirection: 'column'}}>
-                        <Text style={styles.statisticText}>{reports.length} Reports submetidos no Total</Text> 
-                        <Text style={styles.statisticText}>{animalReports} Reports de animais submetidos</Text> 
-                        <Text style={styles.statisticText}>{junkReports} Reports de lixo submetidos</Text> 
-                    </View>
-                : <Text style={styles.statisticText}>Nenhum report efetuado</Text>
-                }
-                <View style={styles.separador} />
+                    { reports.length !== 0 ? 
+                        <View style={{ alignSelf: 'center', flexDirection: 'column'}}>
+                            <Text style={styles.statisticText}>{reports.length} Reports submetidos no Total</Text> 
+                            <Text style={styles.statisticText}>{animalReports} Reports de animais submetidos</Text> 
+                            <Text style={styles.statisticText}>{junkReports} Reports de lixo submetidos</Text> 
+                        </View>
+                    : <Text style={styles.statisticText}>Nenhum report efetuado</Text>
+                    }
+                    <View style={styles.separador} />
+                </React.Fragment>
+                : null }
                 <Text style={styles.headers}>Configurações de Sessão</Text>
                 <View style={{ alignSelf: 'center', flexDirection: 'column'}}>
                     <TouchableOpacity style={styles.logOutButton} onPress={() => logOut()}>
