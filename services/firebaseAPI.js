@@ -57,8 +57,8 @@ export const login = async (response) => {
         console.log(`token retrieved ${id_token}`);
         const credential = firebase.auth.GoogleAuthProvider.credential(id_token);
         return await firebase.auth().signInWithCredential(credential)
-                        .then( response => { userData = {...response.user.providerData[0]};
-                                             addUser();
+                        .then( async response => { userData = {...response.user.providerData[0]};
+                                             await addUser();
                                              return userData; 
                                             } )
                         .catch( error => error.message );

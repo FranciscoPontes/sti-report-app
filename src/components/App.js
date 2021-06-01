@@ -61,6 +61,10 @@ const App = () => {
     FirebaseAPI.startFirebase()
   }, [])
 
+  useEffect( () => {
+    console.log(user);
+  }, [user])
+
   return (
     !user ?
       <Fragment>
