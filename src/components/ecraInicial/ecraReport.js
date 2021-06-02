@@ -322,6 +322,13 @@ const EcraReport = props => {
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
                             region={currentLocation}
+                            onRegionChangeComplete={(region) => {
+                                if(region.latitude.toFixed(6) === currentLocation.latitude.toFixed(6) &&
+                                region.longitude.toFixed(6) === currentLocation.longitude.toFixed(6)){
+                                    return;
+                                }
+                                setCurrentLocation(region);
+                            }}
                             onPress={(e) => {
                                 setGeoLocation({
                                     latitude: e.nativeEvent.coordinate.latitude, 
