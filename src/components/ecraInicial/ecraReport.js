@@ -8,6 +8,8 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
+const INITIAL_LOCATION = { latitude: 32.6592174, longitude: -16.9239346, latitudeDelta: 0.015, longitudeDelta: 0.0121 };
+
 const EcraReport = props => {
     const userChoice = props.route.params.reportType; // 0 -> Animais 1 -> Lixo
     const navigation = props.navigation;
@@ -19,7 +21,7 @@ const EcraReport = props => {
     const [accessType, setAccessType] = useState(null);
     const [adicionalInfo, setAdicionalInfo] = useState("");
     const [anonymous, setAnonymous] = useState(false);
-    const [currentLocation, setCurrentLocation] = useState({ latitude: 32.6592174, longitude: -16.9239346, latitudeDelta: 0.015, longitudeDelta: 0.0121 });
+    const [currentLocation, setCurrentLocation] = useState(null);
     const [geoLocation, setGeoLocation] = useState(null);
 
     const [location, setLocation] = useState("");
@@ -52,8 +54,8 @@ const EcraReport = props => {
                             setCurrentLocation({
                                 latitude: response.coords.latitude, 
                                 longitude: response.coords.longitude,
-                                latitudeDelta: currentLocation.latitudeDelta,
-                                longitudeDelta: currentLocation.longitudeDelta
+                                latitudeDelta: currentLocation ? currentLocation.latitudeDelta : INITIAL_LOCATION.latitudeDelta,
+                                longitudeDelta: currentLocation ? currentLocation.longitudeDelta : INITIAL_LOCATION.longitudeDelta
                             });
                         } )
                         .catch( error => console.log(error) )
@@ -321,12 +323,18 @@ const EcraReport = props => {
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
+                            initialRegion={INITIAL_LOCATION}
                             region={currentLocation}
                             onRegionChangeComplete={(region) => {
+                                if(!currentLocation){ 
+                                    return; 
+                                }
+
                                 if(region.latitude.toFixed(6) === currentLocation.latitude.toFixed(6) &&
                                 region.longitude.toFixed(6) === currentLocation.longitude.toFixed(6)){
                                     return;
                                 }
+                                
                                 setCurrentLocation(region);
                             }}
                             onPress={(e) => {
