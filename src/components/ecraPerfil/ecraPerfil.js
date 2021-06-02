@@ -145,10 +145,29 @@ const EcraPerfil =  props => {
             <Text style={styles.popOverText}>250 Reports Para Desbloquear</Text> 
         </Popover>;
         }
+
+    const BronzePop = () => { 
+        return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/badgeBronze.png')}/>        
+        </TouchableOpacity>)}>
+            <Image style={styles.PopOverImage} source={require('../../../assets/badgeBronze.png')}/>        
+            <Text style={styles.popOverText}>250 Reports Para Desbloquear</Text> 
+        </Popover>;
+        }
     
     const SilverBlur = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
         <TouchableOpacity>
                 <Image style={styles.badgeImage} blurRadius={4} source={require('../../../assets/badgeSilver.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/badgeSilver.png')}/>        
+    <Text style={styles.popOverText}>500 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const SilverPop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/badgeSilver.png')}/>        
         </TouchableOpacity>)}>
     <Image style={styles.PopOverImage} source={require('../../../assets/badgeSilver.png')}/>        
     <Text style={styles.popOverText}>500 Reports Para Desbloquear</Text> 
@@ -164,9 +183,27 @@ const EcraPerfil =  props => {
     </Popover>;
     }
 
+    const GoldPop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/badgeGold.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/badgeGold.png')}/>        
+    <Text style={styles.popOverText}>1000 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
     const PetBlur = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
         <TouchableOpacity>
                 <Image style={styles.badgeImage} blurRadius={4} source={require('../../../assets/PetSavior.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/PetSavior.png')}/>        
+    <Text style={styles.popOverText}>1 Report de Animais Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const PetPop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/PetSavior.png')}/>        
         </TouchableOpacity>)}>
     <Image style={styles.PopOverImage} source={require('../../../assets/PetSavior.png')}/>        
     <Text style={styles.popOverText}>1 Report de Animais Para Desbloquear</Text> 
@@ -182,9 +219,27 @@ const EcraPerfil =  props => {
     </Popover>;
     }
 
+    const JunkPop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/EarthLover.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/EarthLover.png')}/>        
+    <Text style={styles.popOverText}>1 Report de Lixo para Desbloquear</Text> 
+    </Popover>;
+    }
+
     const DutyBlur = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
         <TouchableOpacity>
                 <Image style={styles.badgeImage} blurRadius={4} source={require('../../../assets/ReportDuty.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/ReportDuty.png')}/>        
+    <Text style={styles.popOverText}>10 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const DutyPop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/ReportDuty.png')}/>        
         </TouchableOpacity>)}>
     <Image style={styles.PopOverImage} source={require('../../../assets/ReportDuty.png')}/>        
     <Text style={styles.popOverText}>10 Reports Para Desbloquear</Text> 
@@ -200,6 +255,15 @@ const EcraPerfil =  props => {
     </Popover>;
     }
 
+    const FivePop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/5Reports.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/5Reports.png')}/>        
+    <Text style={styles.popOverText}>5 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
     const Twenty5Blur = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
         <TouchableOpacity>
                 <Image style={styles.badgeImage} blurRadius={4} source={require('../../../assets/25Reports.png')}/>        
@@ -209,9 +273,27 @@ const EcraPerfil =  props => {
     </Popover>;
     }
 
+    const Twenty5Pop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/25Reports.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/25Reports.png')}/>        
+    <Text style={styles.popOverText}>25 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
     const FiftyBlur = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
         <TouchableOpacity>
                 <Image style={styles.badgeImage} blurRadius={4} source={require('../../../assets/50Reports.png')}/>        
+        </TouchableOpacity>)}>
+    <Image style={styles.PopOverImage} source={require('../../../assets/50Reports.png')}/>        
+    <Text style={styles.popOverText}>50 Reports Para Desbloquear</Text> 
+    </Popover>;
+    }
+
+    const FiftyPop = () => {return <Popover popoverStyle={styles.popOverContainer} from={(
+        <TouchableOpacity>
+                <Image style={styles.badgeImage} source={require('../../../assets/50Reports.png')}/>        
         </TouchableOpacity>)}>
     <Image style={styles.PopOverImage} source={require('../../../assets/50Reports.png')}/>        
     <Text style={styles.popOverText}>50 Reports Para Desbloquear</Text> 
@@ -234,23 +316,23 @@ const EcraPerfil =  props => {
     const SpecialBadges = () => {
         if (reports.length >=BRONZE && reports.length <SILVER){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.profileImage} source={require('../../../assets/badgeBronze.png')}/> 
+                {BronzePop()}
                 {SilverBlur()}
                 {GoldBlur()}       
                 </View>;
     } 
         if(reports.length >=SILVER && reports.length <GOLD){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/badgeBronze.png')}/>
-                <Image style={styles.badgeImage} source={require('../../../assets/badgeSilver.png')}/>  
+                {BronzePop()}
+                {SilverPop()}
                 {GoldBlur()}       
                 </View>;               
     } 
         if(reports.length >=GOLD){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/badgeBronze.png')}/>
-                <Image style={styles.badgeImage} source={require('../../../assets/badgeSilver.png')}/>
-                <Image style={styles.badgeImage} source={require('../../../assets/badgeGold.png')}/>       
+                {BronzePop()}
+                {SilverPop()}
+                {GoldPop()}
                 </View>; 
     }   
 
@@ -264,23 +346,23 @@ const EcraPerfil =  props => {
     const NrReportsBadge = () => { 
         if (reports.length >=5 && reports.length < 25){  
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/5Reports.png')}/>
+                {FivePop()}
                 {Twenty5Blur()}
                 {FiftyBlur()}        
                 </View>;
         } 
         if (reports.length >=25 && reports.length < 50){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/5Reports.png')}/>        
-                <Image style={styles.badgeImage} source={require('../../../assets/25Reports.png')}/>
-                {FiftyBlur()}        
+                {FivePop()}
+                {Twenty5Pop()}
+                {FiftyBlur()}       
                 </View>;
         } 
         if (reports.length >=50 ){   
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/5Reports.png')}/>        
-                <Image style={styles.badgeImage} source={require('../../../assets/25Reports.png')}/> 
-                <Image style={styles.badgeImage} source={require('../../../assets/50Reports.png')}/> 
+                {FivePop()}
+                {Twenty5Pop()}
+                {FiftyPop()}
                 </View>;
         } 
     return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}> 
@@ -294,7 +376,7 @@ const EcraPerfil =  props => {
     const MissionBadges = () => { 
         if (animalReports >=1 && junkReports == 0){ 
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/PetSavior.png')}/> 
+                {PetPop()}
                 {JunkBlur()}
                 {DutyBlur()}       
                 </View>;
@@ -302,21 +384,21 @@ const EcraPerfil =  props => {
         if(junkReports >=1 && animalReports == 0 ){
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
                 {PetBlur()}
-                <Image style={styles.badgeImage} source={require('../../../assets/EarthLover.png')}/>
+                {JunkPop()}
                 {DutyBlur()}        
                 </View>;
         }
         if(junkReports >=1 && animalReports >=1 && reports.length >=10){
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-                <Image style={styles.badgeImage} source={require('../../../assets/PetSavior.png')}/>        
-                <Image style={styles.badgeImage} source={require('../../../assets/EarthLover.png')}/>     
-                <Image style={styles.badgeImage} source={require('../../../assets/ReportDuty.png')}/>           
+                {PetPop()}
+                {JunkPop()}
+                {DutyPop()}
                 </View>;
         }   
         if(junkReports >=1 && animalReports >=1 ){
             return <View style={{flexDirection:'row', justifyContent: 'space-evenly'}}>
-            <Image style={styles.badgeImage} source={require('../../../assets/PetSavior.png')}/>        
-            <Image style={styles.badgeImage} source={require('../../../assets/EarthLover.png')}/> 
+            {PetPop()}
+            {JunkPop()}
             {DutyBlur()}       
             </View>;
         }
