@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { View, StyleSheet, Image } from "react-native";
+import { ActivityIndicator, View, StyleSheet, Image } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Header, Item } from 'react-native-elements';
@@ -35,6 +35,7 @@ const Tab = createBottomTabNavigator();
 const App = () => {
 
   const [user, setUser] = useState(null);
+  const [ isLoading, setIsLoading ] = useState(false);
 
   const [request, response, promptAsync] = Google.useIdTokenAuthRequest(
     {
@@ -50,9 +51,21 @@ const App = () => {
     "providerId": "google.com",
     "uid": "test-user",
   }
+
+  const loginWithTestUSer = async ()  => {
+      setIsLoading(true);
+      FirebaseAPI.changeUserData(testData);
+      await FirebaseAPI.addUser(testData);
+      setUser(FirebaseAPI.userData);
+      setIsLoading(false);
+  }
     
   useEffect(() => {
-    const tryLogin = async () => response?.type === 'success' ? setUser(await FirebaseAPI.login(response)) : null;
+    const tryLogin = async () => {
+      setIsLoading(true);
+      if( response?.type === 'success' ) setUser(await FirebaseAPI.login(response) );
+      setIsLoading(false);
+    }
     tryLogin();
     
   }, [response]);
@@ -72,37 +85,41 @@ const App = () => {
         centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
       />
         <View style={styles.buttonsContainer}>  	
-          <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
-            <Button
-              style={{ width: '45%' }}
-              disabled={!request}
-              large
-              // rounded
-              primary
-              onPress={() => {
-                promptAsync();
-              }}
-            >
-              <Text style={{ color: 'white', fontSize: 16 }}>Google Login</Text>
-            </Button>
-          </View>
-
-          <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
-            <Button
-                style={{ width: '45%' }}
-                disabled={!request}
-                large
-                // rounded
-                warning
-                onPress={ async () => {
-                  FirebaseAPI.changeUserData(testData);
-                  await FirebaseAPI.addUser(testData);
-                  setUser(FirebaseAPI.userData);
+          { !isLoading ?
+            <Fragment>
+              <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
+                <Button
+                  style={{ width: '45%' }}
+                  disabled={!request}
+                  large
+                  // rounded
+                  primary
+                  onPress={() => {
+                    promptAsync();
                   }}
-            >
-              <Text style={{ color: 'white', fontSize: 16 }}>Test account</Text>
-            </Button>
+                >
+                  <Text style={{ color: 'white', fontSize: 16 }}>Google Login</Text>
+                </Button>
+              </View>
+
+              <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
+                <Button
+                    style={{ width: '45%' }}
+                    disabled={!request}
+                    large
+                    // rounded
+                    warning
+                    onPress={loginWithTestUSer}
+                >
+                  <Text style={{ color: 'white', fontSize: 16 }}>Test account</Text>
+                </Button>
+              </View>
+            </Fragment>
+          :
+          <View>
+            <ActivityIndicator size="large" color="#0000ff"/>
           </View>
+          }
         </View>
       </Fragment>
       :
