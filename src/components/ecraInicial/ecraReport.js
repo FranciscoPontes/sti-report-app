@@ -202,21 +202,21 @@ const EcraReport = props => {
                             <Row style={{height:100}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("metal")}}>
-                                        <Image source={require('./img/can.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/can.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "metal" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}    
                                     <Text style={{ textAlign: 'center' }}>Metal</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("paper")}}>
-                                        <Image source={require('./img/tissue-roll.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/tissue-roll.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "paper" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null} 
                                     <Text style={{ textAlign: 'center' }}>Papel</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("dead")}}>
-                                        <Image source={require('./img/dead.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/dead.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "dead" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Animais mortos</Text>
@@ -225,21 +225,21 @@ const EcraReport = props => {
                             <Row style={{height:100, marginTop: 20}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("car")}}>
-                                        <Image source={require('./img/car.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/car.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "car" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Peças automóveis</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("dangerous")}}>
-                                        <Image source={require('./img/biohazard-sign.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/biohazard-sign.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "dangerous" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Lixo tóxico</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("plastic")}}>
-                                        <Image source={require('./img/water-bottle.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/water-bottle.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "plastic" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Plástico</Text>
@@ -248,7 +248,7 @@ const EcraReport = props => {
                             <Row style={{height: 100, marginTop: 30, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight style={{width: "33%", height:"100%"}} activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("other")}}>
-                                        <Image source={require('./img/other.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/other.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "other" ? <Badge success style={{ position: 'absolute', left: 80, bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ width: '33%', textAlign: 'center' }}>Outro</Text>
@@ -261,21 +261,21 @@ const EcraReport = props => {
                             <Row style={{height:125}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("bag")}}>
-                                        <Image source={require('./img/eco-bag.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/eco-bag.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { extractionType === "bag" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Saco de Lixo</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("truck")}}>
-                                        <Image source={require('./img/truck.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/truck.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { extractionType === "truck" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Carro do Lixo</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("cart")}}>
-                                        <Image source={require('./img/carry.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/carry.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { extractionType === "cart" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Carrinho de Mão</Text>
@@ -288,7 +288,7 @@ const EcraReport = props => {
                             <Row style={{height:125}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setAccessType("easy")}}>
-                                        <Image source={require('./img/city-building.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/city-building.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { accessType === "easy" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Citadino (fácil)</Text>
@@ -302,7 +302,7 @@ const EcraReport = props => {
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setAccessType("hard")}}>
-                                        <Image source={require('./img/mountains.png')} style={{width: "100%", height:"100%"}}/>
+                                        <Image source={require('./img/mountains.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { accessType === "hard" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
                                     <Text style={{ textAlign: 'center' }}>Montanhoso (difícil)</Text>
@@ -322,9 +322,6 @@ const EcraReport = props => {
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
                             region={currentLocation}
-                            onRegionChangeComplete={(region) => {
-                                setCurrentLocation(region);
-                            }}
                             onPress={(e) => {
                                 setGeoLocation({
                                     latitude: e.nativeEvent.coordinate.latitude, 

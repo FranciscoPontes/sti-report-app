@@ -44,6 +44,9 @@ const EcraSummary = props => {
                 case "hamster":
                     setTypeAnimal("Hamster");
                     break;
+                case "other":
+                    setTypeAnimal("Outro");
+                    break;
                 default:
                     break;
             }
@@ -66,6 +69,9 @@ const EcraSummary = props => {
                     break;
                 case "plastic":
                     setTypeOfTrash("Plástico");
+                    break;
+                case "other":
+                    setTypeOfTrash("Outro");
                     break;
                 default:
                     break;
