@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         borderRadius: 25
     },
     mainScreen:{
-        backgroundColor: "#FFFFFF"
+        backgroundColor : "#ECE8E8",
     },
     logOutButton:{
         alignItems: 'center',
@@ -436,14 +436,16 @@ const EcraPerfil =  props => {
                         <Text style={{fontSize: 15, textAlign: "center"}}>{userData.email}</Text>
                     </View> 
                 </View>
-                <View style={styles.separador} />
-                <Text style={styles.headers}>Progesso</Text>
+                { !userData.admin ? <View style={styles.separador} /> : null }
+                { !userData.admin ? <Text style={styles.headers}>Progresso</Text> : null }
+                { !userData.admin ?
                 <View style={{}}>
                     <View style={styles.progressBar}>
                         {Barfill()}
                     </View>
                     {ProgressCheck()} 
-                </View> 
+                </View> : null 
+                }
                 <View style={styles.separador} />
                 { !userData.admin ?
                 <React.Fragment>

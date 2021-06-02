@@ -44,10 +44,10 @@ const App = () => {
   );
 
   const testData = {
-    "displayName": "Test user",
-    "email": null,
+    "displayName": "José Ricardo",
+    "email": "jose.ricardo@gmail.com",
     "phoneNumber": null,
-    "photoURL": null,
+    "photoURL": "https://assets-global.website-files.com/5a690960b80baa0001e05b0f/5bb25c47222db17fe0c2d846_John-headshot.png",
     "providerId": "google.com",
     "uid": "test-user",
   }
@@ -73,10 +73,6 @@ const App = () => {
   useEffect(() => {
     FirebaseAPI.startFirebase()
   }, [])
-
-  useEffect( () => {
-    console.log(user);
-  }, [user])
 
   return (
     !user ?
@@ -139,9 +135,12 @@ const App = () => {
             fontSize: 12,
             marginVertical: 5
           },
-          style:{
+          style: {
+            height: 55,
+          },
+          tabStyle: {
             height: 55
-          }
+          },
         }}>
           <Tab.Screen name="Home" component={Home} initialParams={ { user } } 
             options={{ unmountOnBlur: true, 
@@ -219,7 +218,10 @@ const App = () => {
         },
         style:{
           height: 55
-        }
+        },
+        tabStyle: {
+          height: 55
+        },
       }}>
         <Tab.Screen name="Mapa" component={EcraMapa}
           options={{

@@ -7,12 +7,14 @@ import * as ImagePicker from 'expo-image-picker';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
-
-const INITIAL_LOCATION = { latitude: 32.6592174, longitude: -16.9239346, latitudeDelta: 0.015, longitudeDelta: 0.0121 };
+import { useIsFocused } from '@react-navigation/native'
 
 const EcraReport = props => {
     const userChoice = props.route.params.reportType; // 0 -> Animais 1 -> Lixo
     const navigation = props.navigation;
+
+    const mapView = React.createRef();
+    const isFocused = useIsFocused();
 
     const [image, setImage] = useState(null);
     const [typeAnimal, setTypeAnimal] = useState(null);
@@ -21,45 +23,43 @@ const EcraReport = props => {
     const [accessType, setAccessType] = useState(null);
     const [adicionalInfo, setAdicionalInfo] = useState("");
     const [anonymous, setAnonymous] = useState(false);
-    const [currentLocation, setCurrentLocation] = useState(null);
-    const [geoLocation, setGeoLocation] = useState(null);
-
+    const [geoLocation, setGeoLocation] = useState( { latitude: 0, longitude: 0, latitudeDelta: 0.015, longitudeDelta: 0.0121 });
+    const [currentZoom, setCurrentZoom] = useState({ latitudeDelta: 0.015, longitudeDelta: 0.0121 })
     const [location, setLocation] = useState("");
 
+    useEffect(() => {    
+        async function findCoordinates() {
+          let { status } = await Location.requestForegroundPermissionsAsync();
+          await Location.hasServicesEnabledAsync()
+                        .then( response => console.log("GPS ENABLED: " + response) )
+                        .catch( error => console.log("GPS ENABLED ERROR: " + error) );
+    
+                        if (status !== 'granted') {
+                          console.log('Permission to access location was denied');
+                          return;
+                        }
+    
+          await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High})
+                      .then( response => { setGeoLocation( { latitude: response.coords.latitude, longitude: response.coords.longitude }); })
+                      .catch( error => console.log(error) )
+    
+        };
+    
+        findCoordinates();
+    } , [isFocused])
+
+    const goToUserLocation = () => {
+        mapView.current.animateToRegion({
+            longitude: geoLocation.longitude,
+            latitude: geoLocation.latitude,
+            latitudeDelta: currentZoom.latitudeDelta,
+            longitudeDelta: currentZoom.longitudeDelta
+        }, 100);
+    }
+
     useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-
-            await Location.hasServicesEnabledAsync()
-                            .then( response => console.log("GPS ENABLED: " + response) )
-                            .catch( error => console.log("GPS ENABLED ERROR: " + error) );
-
-            if (status !== 'granted') {
-                console.log('Permission to access location was denied');
-                return;
-            }
-
-            await findCoordinates();
-        })();
-    }, []);
-
-
-    const findCoordinates = async () => {
-        await Location.getCurrentPositionAsync({ timeInterval: 2000})
-                        .then( response => {
-                            setGeoLocation( { 
-                                latitude: response.coords.latitude, 
-                                longitude: response.coords.longitude 
-                            });
-                            setCurrentLocation({
-                                latitude: response.coords.latitude, 
-                                longitude: response.coords.longitude,
-                                latitudeDelta: currentLocation ? currentLocation.latitudeDelta : INITIAL_LOCATION.latitudeDelta,
-                                longitudeDelta: currentLocation ? currentLocation.longitudeDelta : INITIAL_LOCATION.longitudeDelta
-                            });
-                        } )
-                        .catch( error => console.log(error) )
-    };
+        goToUserLocation();
+      }, [geoLocation])
 
     const reverseCoord = async (newLocation) => {
         await Location.reverseGeocodeAsync(newLocation)
@@ -323,30 +323,23 @@ const EcraReport = props => {
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
-                            initialRegion={INITIAL_LOCATION}
-                            region={currentLocation}
-                            onRegionChangeComplete={(region) => {
-                                if(!currentLocation){ 
-                                    return; 
-                                }
-
-                                if(region.latitude.toFixed(6) === currentLocation.latitude.toFixed(6) &&
-                                region.longitude.toFixed(6) === currentLocation.longitude.toFixed(6)){
-                                    return;
-                                }
-                                
-                                setCurrentLocation(region);
+                            ref={mapView}
+                            initialRegion={{
+                                latitude: geoLocation.latitude,
+                                longitude: geoLocation.longitude,
+                                latitudeDelta: 0.015, 
+                                longitudeDelta: 0.0121
+                            }}
+                            onRegionChangeComplete={(e) => {
+                                setCurrentZoom({
+                                    latitudeDelta: e.latitudeDelta,
+                                    longitudeDelta: e.longitudeDelta
+                                })
                             }}
                             onPress={(e) => {
                                 setGeoLocation({
                                     latitude: e.nativeEvent.coordinate.latitude, 
-                                    longitude: e.nativeEvent.coordinate.longitude
-                                });
-                                setCurrentLocation({
-                                    latitude: e.nativeEvent.coordinate.latitude, 
                                     longitude: e.nativeEvent.coordinate.longitude,
-                                    latitudeDelta: currentLocation.latitudeDelta,
-                                    longitudeDelta: currentLocation.longitudeDelta
                                 });
                                 reverseCoord(e.nativeEvent.coordinate);
                             }}

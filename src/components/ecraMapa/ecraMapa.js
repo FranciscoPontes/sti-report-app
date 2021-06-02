@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
   addButtonMap:{
     position: 'absolute',
     zIndex: 99,
-
   },
   createAnimalReport:{
     position: 'absolute',
@@ -52,8 +51,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export default function Map(props){
-  Moment.locale('pt');
+const Map = props => {
   const currentUser = API.userData;
   const [ geoLocation, setGeoLocation ] = useState( { latitude: 0, longitude: 0, });
   const [trashPins, setTrashPins] = useState(1);
@@ -244,7 +242,7 @@ export default function Map(props){
       >
       {usersLoaded ? mapMarkers() : null}
       </MapView>
-        <View style={{ flex: 1 }}>
+        {!currentUser.admin ? <View style={{ flex: 1 }}>
           <Fab
             active={createButtonStatus}
             direction="up"
@@ -264,7 +262,9 @@ export default function Map(props){
               />
             </TouchableHighlight>
           </Fab>
-        </View>
+      </View> : null}
     </Container>
-  );
+  )
 }
+
+export default Map;
