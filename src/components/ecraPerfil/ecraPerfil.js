@@ -152,7 +152,7 @@ const EcraPerfil =  props => {
                 <Image style={styles.badgeImage} source={require('../../../assets/badgeBronze.png')}/>        
         </TouchableOpacity>)}>
             <Image style={styles.PopOverImage} source={require('../../../assets/badgeBronze.png')}/>        
-            <Text style={styles.popOverText}>250 Reports Para Desbloquear</Text> 
+            <Text style={styles.popOverText}>Desbloqueado com 250 Reports</Text> 
         </Popover>;
         }
     
@@ -170,7 +170,7 @@ const EcraPerfil =  props => {
                 <Image style={styles.badgeImage} source={require('../../../assets/badgeSilver.png')}/>        
         </TouchableOpacity>)}>
     <Image style={styles.PopOverImage} source={require('../../../assets/badgeSilver.png')}/>        
-    <Text style={styles.popOverText}>500 Reports Para Desbloquear</Text> 
+    <Text style={styles.popOverText}>Desbloqueado com 500 $eports</Text> 
     </Popover>;
     }
     
@@ -188,7 +188,7 @@ const EcraPerfil =  props => {
                 <Image style={styles.badgeImage} source={require('../../../assets/badgeGold.png')}/>        
         </TouchableOpacity>)}>
     <Image style={styles.PopOverImage} source={require('../../../assets/badgeGold.png')}/>        
-    <Text style={styles.popOverText}>1000 Reports Para Desbloquear</Text> 
+    <Text style={styles.popOverText}>Desbloqueado com 1000 Eeports"</Text> 
     </Popover>;
     }
 
