@@ -162,7 +162,7 @@ const EcraSummary = props => {
         contentLoaded ?
         <Container>
             <Content padder>
-                <Text style={{textAlign: 'center'}}>Resumo do report</Text>
+                <Text style={styles.headers}>Resumo do report</Text>
                 <Card>
                     <CardItem>
                         <Body>
@@ -228,7 +228,9 @@ const EcraSummary = props => {
 
 const styles = StyleSheet.create({
     withImage: {
-        height: 200
+        height: 200,
+        borderColor: "black",
+        borderWidth: 2
     },
     withoutImage: {
         height: 0
@@ -248,7 +250,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         textAlign: "center",
-    }
+    },
+    headers:{
+        marginBottom: 20,
+        marginTop: 20,
+        fontSize: 25, 
+        textAlign: "center", 
+        fontWeight: "bold"
+    },
 });
 
 export default EcraSummary;

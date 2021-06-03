@@ -133,39 +133,41 @@ const EcraReport = props => {
 
     return (
         <Container>
-            <Content padder>
+            <Content style={{padding: 25}}>
                 <Form>
-                    <Label style={{marginBottom: 5}}>Fotografia <Text style={{color: 'red'}}>*</Text></Label>
+                    <Label style={styles.headers}>Fotografia <Text style={{color: 'red'}}>*</Text></Label>
                     <Grid style={styles.gridImage}>
                         <Row style={image ? styles.withImage : styles.withoutImage}>
                             {image && <Image source={{ uri: image }} style={styles.image} />}
                             <Col>
                                 <Row style={{paddingTop: 73}}>
                                     <Col style={{flex: (image ? null : 5)}}>
-                                        <FAB icon={<Icon name="image" color="white"/>} placement="right" size="small" color="rgb(65, 137, 214)" style={{position: "absolute", paddingRight: (image ? 60 : 0)}} onPress={pickImage}></FAB>
+                                        <FAB icon={<Icon name="camera" color="white"/>} placement="right" color="rgb(65, 137, 214)" style={{position: "absolute", paddingRight: (image ? 60 : 0), bottom: -45}} onPress={openCamera}></FAB>
                                     </Col>
                                     <Col>
-                                        <FAB icon={<Icon name="camera" color="white"/>} placement="right" color="rgb(65, 137, 214)" style={{position: 'absolute'}} onPress={openCamera}></FAB>
+                                        <FAB icon={<Icon name="image" color="white"/>} placement="right" color="rgb(65, 137, 214)" style={{position: 'absolute', right: (image ? -5 : 0), bottom: -45}} onPress={pickImage}></FAB>
                                     </Col>
                                 </Row>     
                             </Col>
                         </Row>
                     </Grid>
 
+                    <View style={styles.separador} />
+
                     { userChoice === 0 
                     
                     ?
                     
                     (<View>
-                        <Label style={{paddingTop: 15}}>Tipo de Animal <Text style={{color: 'red'}}>*</Text></Label>
+                        <Label style={styles.headers}>Tipo de Animal <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:100, marginTop: 25, marginBottom: 15}}>
+                            <Row style={styles.rows}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("dog")}}>
                                         <Image source={require('./img/dog.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "dog" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}    
-                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Cão</Text>
+                                    <Text style={styles.selectItem}>Cão</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("cat")}}>
@@ -182,7 +184,7 @@ const EcraReport = props => {
                                     <Text style={{ textAlign: 'center', marginTop: 10   }}>Pássaro</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height:100, marginTop: 25, marginBottom: 15}}>
+                            <Row style={styles.rows}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("turtle")}}>
                                         <Image source={require('./img/turtle.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
@@ -205,13 +207,13 @@ const EcraReport = props => {
                                     <Text style={{ textAlign: 'center', marginTop: 10  }}>Hamster</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height:100, marginTop: 10, marginBottom: 15}}>
+                            <Row style={styles.rows125}>
                                 <Col>
                                     <TouchableHighlight style={{width: "33%", height:"100%"}} activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("other")}}>
-                                        <Image source={require('./img/other.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
+                                        <Image source={require('./img/paws.png')} style={{width: "100%", height:"100%", marginTop: 5}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "other" ? <Badge success style={{ position: 'absolute', left: 80, bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ width: '33%', textAlign: 'center'}}>Outro</Text>
+                                    <Text style={{ width: '33%', textAlign: 'center', marginTop: 20}}>Outro</Text>
                                 </Col>
                             </Row>
                         </Grid>
@@ -220,9 +222,9 @@ const EcraReport = props => {
                     : 
                     
                     (<View>
-                        <Label style={{paddingTop: 15}}>Tipo de Lixo <Text style={{color: 'red'}}>*</Text></Label>
+                        <Label style={styles.headers}>Tipo de Lixo <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:100, marginTop: 25, marginBottom: 15}}>
+                            <Row style={styles.rows}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("metal")}}>
                                         <Image source={require('./img/can.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
@@ -245,13 +247,13 @@ const EcraReport = props => {
                                     <Text style={{ textAlign: 'center', marginTop: 10   }}>Animais mortos</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height:100, marginTop: 30, marginBottom: 15}}>
+                            <Row style={styles.rows}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("car")}}>
                                         <Image source={require('./img/car.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "car" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Peças automóveis</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10}}>Peças automóveis</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("dangerous")}}>
@@ -265,23 +267,25 @@ const EcraReport = props => {
                                         <Image source={require('./img/water-bottle.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "plastic" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Plástico</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10}}>Plástico</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height: 100, marginTop: 30, marginBottom: 25}}>
+                            <Row style={styles.rows}>
                                 <Col>
-                                    <TouchableHighlight style={{width: "33%", height:"100%"}} activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("other")}}>
-                                        <Image source={require('./img/other.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
+                                    <TouchableHighlight style={{width: "33%", height:"100%", top: 15}} activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("other")}}>
+                                        <Image source={require('./img/waste.png')} style={{width: "100%", height:"100%", marginTop: 5}} resizeMode='contain'/>
                                     </TouchableHighlight>
-                                    { typeOfTrash === "other" ? <Badge success style={{ position: 'absolute', left: 80, bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ width: '33%', textAlign: 'center', marginTop: 10   }}>Outro</Text>
+                                    { typeOfTrash === "other" ? <Badge success style={{ position: 'absolute', left: 80, bottom: -15}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
+                                    <Text style={{ width: '33%', textAlign: 'center', marginTop: 30}}>Outro</Text>
                                 </Col>
                             </Row>
                         </Grid>
 
-                        <Label style={{marginTop: 15}}>Recursos Necessários <Text style={{color: 'red'}}>*</Text></Label>
+                        <View style={styles.separador} />
+
+                        <Label style={styles.headers}>Recursos Necessários <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:125, marginTop: 20, marginBottom: 15}}>
+                            <Row style={styles.rows125}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("bag")}}>
                                         <Image source={require('./img/eco-bag.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
@@ -306,9 +310,11 @@ const EcraReport = props => {
                             </Row>
                         </Grid>
 
-                        <Label style={{marginTop: 30}}>Tipo de Acesso <Text style={{color: 'red'}}>*</Text></Label>
+                        <View style={styles.separador} />
+
+                        <Label style={styles.headers}>Tipo de Acesso <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:125, marginTop: 10, marginBottom: 15}}>
+                            <Row style={styles.rows125}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setAccessType("easy")}}>
                                         <Image source={require('./img/city-building.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
@@ -336,11 +342,15 @@ const EcraReport = props => {
                     
                     }
 
-                    <Label style={{marginTop: 30, marginBottom: 5}}>Informação Adicional</Label>
-                    <Textarea rowSpan={5} bordered enableAutoAutomaticScroll={false} scrollEnabled={false} keyboardShouldPersistTaps="always" placeholder="" defaultValue={adicionalInfo} onChangeText={adicionalInfo => setAdicionalInfo(adicionalInfo)}/>
+                    <View style={styles.separador} />
 
-                    <Label style={{paddingTop: 15, marginBottom: 5}}>Localização <Text style={{color: 'red'}}>*</Text></Label>
-                    <View style={{height: 300}}>
+                    <Label style={styles.headers}>Informação Adicional</Label>
+                    <Textarea style={{marginBottom: 25}} rowSpan={5} bordered enableAutoAutomaticScroll={false} scrollEnabled={false} keyboardShouldPersistTaps="always" placeholder="" defaultValue={adicionalInfo} onChangeText={adicionalInfo => setAdicionalInfo(adicionalInfo)}/>
+
+                    <View style={styles.separador} />
+
+                    <Label style={styles.headers}>Localização <Text style={{color: 'red'}}>*</Text></Label>
+                    <View style={{height: 300, borderWidth: 2, borderColor: "black"}}>
                         <MapView
                             provider={PROVIDER_GOOGLE}
                             style={styles.map}
@@ -389,7 +399,7 @@ const EcraReport = props => {
                                 <Text style={{color: 'red', textAlign: 'center'}}>Por favor preencha todos os campos obrigatórios</Text>
                             </Row>
                         }
-                        <Row style={{paddingTop: 15}}>
+                        <Row style={{paddingTop: 15, paddingBottom: 45}}>
                             <Button
                                 info
                                 disabled={!image || (userChoice === 0 && !typeAnimal) || (userChoice === 1 && (!typeOfTrash || !extractionType || !accessType))}
@@ -408,10 +418,14 @@ const EcraReport = props => {
 
 const styles = StyleSheet.create({
     withImage: {
-        height: 200
+        height: 200,
+        marginBottom: 30,
+        borderWidth: 2,
+        borderColor: "black"
     },
     withoutImage: {
-        height: 60
+        height: 60,
+        marginBottom: 50
     },
     image: {
         width: "100%", 
@@ -432,7 +446,6 @@ const styles = StyleSheet.create({
     },
     map: {
         ...StyleSheet.absoluteFillObject,
-        top: '2%'
     },
     mapBadge: {
         textAlign: 'center', 
@@ -451,9 +464,28 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     separador:{
-        marginVertical: 25,
+        marginTop: 10,
         borderBottomColor: '#737373',
         borderBottomWidth: 2,
+    },
+    headers:{
+        marginBottom: 20,
+        marginTop: 20,
+        fontSize: 25, 
+        textAlign: "center", 
+        fontWeight: "bold"
+    },
+    rows:{
+        marginBottom: 55,
+        height: 100
+    },
+    rows125:{
+        marginBottom: 55,
+        height: 125
+    },
+    selectItem:{
+        textAlign: 'center',
+        marginTop: 10
     }
 });
 
