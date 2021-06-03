@@ -82,21 +82,21 @@ const EcraHistorico = props => {
                 </Text>
                 <SelectPicker
                             selectedValue={filterByType}
-                            style={{height: 50, width: 150 }}
+                            style={{height: 50, width: "80%" }}
                             onValueChange={ itemValue => setFilterByType(itemValue) }>
-                            <SelectPicker.Item label="Todos" value="all" />
-                            <SelectPicker.Item label="Animais" value="animals" />
-                            <SelectPicker.Item label="Lixo" value="trash" />
+                            <SelectPicker.Item label="Tipo: Todos" value="all" />
+                            <SelectPicker.Item label="Tipo: Animais" value="animals" />
+                            <SelectPicker.Item label="Tipo: Lixo" value="trash" />
                 </SelectPicker>
                 <SelectPicker
                             selectedValue={filterByState}
-                            style={{height: 50, width: 150 }}
+                            style={{height: 50, width: "80%" }}
                             onValueChange={ itemValue => setFilterByState(itemValue) }>
-                            <SelectPicker.Item label="Todos" value="all" />
+                            <SelectPicker.Item label="Estado: Todos" value="all" />
                             {  userData.admin ? <SelectPicker.Item label="Análise" value="processing" /> : null }
-                            <SelectPicker.Item label="Rejeitado" value="rejected" />
-                            <SelectPicker.Item label="Aprovado" value="approved" />
-                            <SelectPicker.Item label="Concluído" value="closed" />
+                            <SelectPicker.Item label="Estado: Rejeitado" value="rejected" />
+                            <SelectPicker.Item label="Estado: Aprovado" value="approved" />
+                            <SelectPicker.Item label="Estado: Concluído" value="closed" />
                 </SelectPicker>
                 <ScrollView style={{ flexDirection: 'column', width: '85%' }} nestedScrollEnabled>
                 {  !userData.admin ? ( filteredData.filter( report => report.status !== PROCESSING_STATUS).length !== 0 ? 

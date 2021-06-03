@@ -114,7 +114,7 @@ const EcraDetails = props => {
                                 </View> :
                                 currentUserData.uid === userOfReport.uid ?
                                 <View style={styles.userInfo}>
-                                    <Text style={styles.headers}>Este report foi feito por ti próprio no entanto as tuas informações encontram-se ocultas para os outros utilizadores</Text>
+                                    <Text style={styles.headers}>Este report foi feito por si próprio no entanto as tuas informações encontram-se ocultas para os outros utilizadores</Text>
                                 </View> : 
                                 <View style={styles.userInfo}>
                                     <Text style={styles.headers}>O utilizador optou por não partilhar informações suas neste report</Text>
@@ -194,7 +194,7 @@ const EcraDetails = props => {
                                 </View> :
                                 currentUserData.uid === userOfReport.uid ?
                                 <View style={styles.userInfo}>
-                                    <Text style={styles.headers}>Este report foi feito por ti próprio no entanto as tuas informações encontram-se ocultas para os outros utilizadores</Text>
+                                    <Text style={styles.headers}>Este report foi feito por si próprio no entanto as tuas informações encontram-se ocultas para os outros utilizadores</Text>
                                 </View> : 
                                 <View style={styles.userInfo}>
                                     <Text style={styles.headers}>O utilizador optou por não partilhar informações suas neste report</Text>
