@@ -93,7 +93,7 @@ const EcraHistorico = props => {
                             style={{height: 50, width: "80%" }}
                             onValueChange={ itemValue => setFilterByState(itemValue) }>
                             <SelectPicker.Item label="Estado: Todos" value="all" />
-                            {  userData.admin ? <SelectPicker.Item label="Análise" value="processing" /> : null }
+                            {  userData.admin ? <SelectPicker.Item label="Estado: Análise" value="processing" /> : null }
                             <SelectPicker.Item label="Estado: Rejeitado" value="rejected" />
                             <SelectPicker.Item label="Estado: Aprovado" value="approved" />
                             <SelectPicker.Item label="Estado: Concluído" value="closed" />
