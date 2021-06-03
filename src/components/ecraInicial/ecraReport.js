@@ -133,7 +133,7 @@ const EcraReport = props => {
 
     return (
         <Container>
-            <Content style={{padding: 25}}>
+            <Content style={{padding: 15}}>
                 <Form>
                     <Label style={styles.headers}>Fotografia <Text style={{color: 'red'}}>*</Text></Label>
                     <Grid style={styles.gridImage}>

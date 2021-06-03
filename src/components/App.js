@@ -1,14 +1,14 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { ActivityIndicator, View, StyleSheet, Image } from "react-native";
+import { ActivityIndicator, View, StyleSheet, Image, TouchableOpacity, Text } from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Header, Item } from 'react-native-elements';
 import EcraInicial from '../components/ecraInicial/ecraInicial';
 import EcraMapa from '../components/ecraMapa/ecraMapa';
 import EcraPerfil from '../components/ecraPerfil/ecraPerfil';
-import { Button, Text } from 'native-base';
 import TabHistorico from './ecraHistorico/tabHistorico';
 import Home from './ecraInicial/home';
+import { Icon } from 'react-native-elements';
 
 import * as FirebaseAPI from '../../services/firebaseAPI';
 
@@ -26,7 +26,26 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     ...StyleSheet.absoluteFillObject,
     position: 'absolute',
-    top: '45%',
+    top: 85,
+    backgroundColor : "#ECE8E8",
+  },
+  loginScreenImage:{
+    alignSelf: "center",
+    width: 380,
+    height: 250
+  },
+  loginText:{
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  appName:{
+    fontSize: 40,
+    fontWeight: "bold",
+  },
+  loadingScreen:{
+    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    backgroundColor : "#ECE8E8",
   }
 });
 
@@ -78,41 +97,63 @@ const App = () => {
     !user ?
       <Fragment>
         <Header style={styles.header}
-        centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
+        centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 18, marginBottom: 5 } }}
       />
-        <View style={styles.buttonsContainer}>  	
+        <View style={!isLoading ? styles.buttonsContainer : styles.loadingScreen}>  	
           { !isLoading ?
-            <Fragment>
-              <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
-                <Button
-                  style={{ width: '45%' }}
-                  disabled={!request}
-                  large
-                  // rounded
-                  primary
+            <View style={{flex: 1, alignItems: "center", justifyContent: "center", flexDirection: "column"}}>
+              <View style={{flex: 3, flexDirection: "column", alignItems: "center", justifyContent: "center"}}>
+              <Text style={styles.appName}>Nature Reporter</Text>
+              </View>
+              <View style={{flex: 1}}>
+                <Text style={styles.loginText}>Login</Text>
+              </View>
+              <View style={{ alignSelf: 'center', paddingBottom: '5%', flex: 1 }}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={{backgroundColor: 'rgb(0,122,200)', paddingVertical: 10, borderRadius: 10, width: 250, height: 65}}
                   onPress={() => {
                     promptAsync();
                   }}
                 >
-                  <Text style={{ color: 'white', fontSize: 16 }}>Google Login</Text>
-                </Button>
+                  <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                    <View style={{flex: 1}}>
+                      <Icon name='google' type='font-awesome-5' color="white"/>
+                    </View>
+                    <View style={{flex: 3}}>
+                      <Text style={{ color: 'white', fontSize: 24, textAlign: "center", fontWeight: "bold"}}>Google Login</Text>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </View>
 
-              <View style={{ alignSelf: 'center', paddingBottom: '5%' }}>
-                <Button
-                    style={{ width: '45%' }}
-                    disabled={!request}
-                    large
-                    // rounded
-                    warning
-                    onPress={loginWithTestUSer}
-                >
-                  <Text style={{ color: 'white', fontSize: 16 }}>Test account</Text>
-                </Button>
+              <View style={{ alignSelf: 'center', flex: 1 }}>
+                <TouchableOpacity
+                  activeOpacity={0.5}
+                  style={{backgroundColor: "rgb(0,122,200)", paddingVertical: 10, borderRadius: 10, width: 250, height: 65}}
+                  onPress={loginWithTestUSer}
+                > 
+                  <View style={{flex: 1, flexDirection: "row", alignItems: "center"}}>
+                    <View style={{flex: 1}}>
+                      <Icon name='sign-in-alt' type='font-awesome-5' color="white"/>
+                    </View>
+                    <View style={{flex: 3}}>
+                      <View style={{flex: 1, flexDirection: "column", justifyContent: "center"}}>
+                        <Text style={{ color: 'white', fontSize: 18, textAlign: "center", fontWeight: "bold"}}>Login Rápido</Text>
+                        <Text style={{ color: 'white', fontSize: 18, textAlign: "center", fontWeight: "bold"}}>(Conta Teste)</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </Fragment>
+              <View style={{flex: 5, flexDirection: "column", alignItems: "center", justifyContent: "center", paddingVertical: 30}}>
+                <View style={styles.loginScreenImageContainer}>
+                  <Image resizeMode="contain" style={styles.loginScreenImage} source={require('../../assets/loginScreenImage.png')} />
+                </View>
+              </View>
+            </View>
           :
-          <View>
+          <View style={{top: "50%"}}>
             <ActivityIndicator size="large" color="#0000ff"/>
           </View>
           }
@@ -121,7 +162,7 @@ const App = () => {
       :
       <NavigationContainer>
         <Header style={styles.header}
-          centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 20 } }}
+          centerComponent={{ text: 'Nature Reporter', style: { color: '#fff', fontWeight: 'bold', fontSize: 20} }}
         />
         {user.admin === false ?
         <Tab.Navigator 
