@@ -20,7 +20,8 @@ const EcraSummary = props => {
 
     useEffect(() => {
         setDetails();
-        reverseCoord();
+        //reverseCoord();
+        getAddressFromCoordinates(report.geoLocation.latitude, report.geoLocation.longitude);
     }, []);
 
     const setDetails = () => {
@@ -107,14 +108,32 @@ const EcraSummary = props => {
         }
     };
 
-    const reverseCoord = async () => {
+    /*const reverseCoord = async () => {
         await Location.reverseGeocodeAsync(report.geoLocation)
                         .then( response => {
                             var data = response[0].street + ", " + response[0].postalCode + ", " + response[0].city + ", " + response[0].country;
                             setLocation(data);
                         } )
                         .catch( error => console.log(error))
-    };
+    };*/
+
+    function getAddressFromCoordinates(latitude, longitude) {
+        return new Promise((resolve) => {
+            const API_KEY = "CPnrb5c5grlxwZM2DQoXO1WYK-_8XSgnCCfmDYjHBGU";
+            const url = "https://revgeocode.search.hereapi.com/v1/revgeocode?at=" + latitude + "," + longitude + "&lang=pt-PT&apikey=" + API_KEY;
+            fetch(url)
+            .then(res => res.json())
+            .then((resJson) => {
+                var address = resJson.items[0].address;
+                var data = address.street + ", " + address.postalCode + ", " + address.city + ", " + address.county;
+                setLocation(data);
+            })
+            .catch((e) => {
+                console.log('Error in getAddressFromCoordinates', e)
+                resolve()
+            })
+        })
+    }
 
     const sendNewReport = async () => {
         setContentLoaded(false);

@@ -128,7 +128,7 @@ const App = () => {
           tabBarOptions={{
           activeTintColor: 'white',
           inactiveTintColor: 'black',
-          activeBackgroundColor: 'rgb(0, 100, 255)',
+          activeBackgroundColor: 'rgb(70, 100, 255)',
           inactiveBackgroundColor: 'rgb(0, 120, 255)',
           labelStyle: {
             fontWeight: "bold",

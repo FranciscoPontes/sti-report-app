@@ -23,8 +23,8 @@ const EcraReport = props => {
     const [accessType, setAccessType] = useState(null);
     const [adicionalInfo, setAdicionalInfo] = useState("");
     const [anonymous, setAnonymous] = useState(false);
-    const [geoLocation, setGeoLocation] = useState( { latitude: 0, longitude: 0, latitudeDelta: 0.015, longitudeDelta: 0.0121 });
-    const [currentZoom, setCurrentZoom] = useState({ latitudeDelta: 0.015, longitudeDelta: 0.0121 })
+    const [geoLocation, setGeoLocation] = useState( { latitude: 0, longitude: 0, latitudeDelta: 0.001, longitudeDelta: 0.007 });
+    const [currentZoom, setCurrentZoom] = useState({ latitudeDelta: 0.001, longitudeDelta: 0.007 })
     const [location, setLocation] = useState("");
 
     useEffect(() => {    
@@ -40,7 +40,7 @@ const EcraReport = props => {
                         }
     
           await Location.getCurrentPositionAsync({accuracy:Location.Accuracy.High})
-                      .then( response => { setGeoLocation( { latitude: response.coords.latitude, longitude: response.coords.longitude }); })
+                      .then( response => { setGeoLocation( { latitude: response.coords.latitude, longitude: response.coords.longitude }); getAddressFromCoordinates(response.coords.latitude, response.coords.longitude); })
                       .catch( error => console.log(error) )
     
         };
@@ -61,14 +61,33 @@ const EcraReport = props => {
         goToUserLocation();
       }, [geoLocation])
 
-    const reverseCoord = async (newLocation) => {
+    /*const reverseCoord = async (newLocation) => {
+        console.log(newLocation)
         await Location.reverseGeocodeAsync(newLocation)
                         .then( response => {
                             var data = response[0].street + ", " + response[0].postalCode + ", " + response[0].city + ", " + response[0].country;
                             setLocation(data);
                         } )
                         .catch( error => console.log(error))
-    };
+    };*/
+
+    function getAddressFromCoordinates(latitude, longitude) {
+        return new Promise((resolve) => {
+            const API_KEY = "CPnrb5c5grlxwZM2DQoXO1WYK-_8XSgnCCfmDYjHBGU";
+            const url = "https://revgeocode.search.hereapi.com/v1/revgeocode?at=" + latitude + "," + longitude + "&lang=pt-PT&apikey=" + API_KEY;
+            fetch(url)
+            .then(res => res.json())
+            .then((resJson) => {
+                var address = resJson.items[0].address;
+                var data = address.street + ", " + address.postalCode + ", " + address.city + ", " + address.county;
+                setLocation(data);
+            })
+            .catch((e) => {
+                console.log('Error in getAddressFromCoordinates', e)
+                resolve()
+            })
+        })
+    }
 
     const pickImage = async () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -83,7 +102,7 @@ const EcraReport = props => {
             allowsEditing: true,
             allowsMultipleSelection: true,
             aspect: [4, 3],
-            quality: 1,
+            quality: 0.2,
         });
 
         console.log(result);
@@ -101,7 +120,9 @@ const EcraReport = props => {
             return;
         }
 
-        const result = await ImagePicker.launchCameraAsync();
+        const result = await ImagePicker.launchCameraAsync({
+            quality: 0.2
+        });
 
         console.log(result);
 
@@ -114,7 +135,7 @@ const EcraReport = props => {
         <Container>
             <Content padder>
                 <Form>
-                    <Label>Fotografia <Text style={{color: 'red'}}>*</Text></Label>
+                    <Label style={{marginBottom: 5}}>Fotografia <Text style={{color: 'red'}}>*</Text></Label>
                     <Grid style={styles.gridImage}>
                         <Row style={image ? styles.withImage : styles.withoutImage}>
                             {image && <Image source={{ uri: image }} style={styles.image} />}
@@ -130,7 +151,7 @@ const EcraReport = props => {
                             </Col>
                         </Row>
                     </Grid>
-                    
+
                     { userChoice === 0 
                     
                     ?
@@ -138,59 +159,59 @@ const EcraReport = props => {
                     (<View>
                         <Label style={{paddingTop: 15}}>Tipo de Animal <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:100}}>
+                            <Row style={{height:100, marginTop: 25, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("dog")}}>
                                         <Image source={require('./img/dog.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "dog" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}    
-                                    <Text style={{ textAlign: 'center' }}>Cão</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Cão</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("cat")}}>
                                         <Image source={require('./img/cat.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "cat" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null} 
-                                    <Text style={{ textAlign: 'center' }}>Gato</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Gato</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("bird")}}>
                                         <Image source={require('./img/sparrow.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "bird" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Pássaro</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Pássaro</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height:100, marginTop: 15}}>
+                            <Row style={{height:100, marginTop: 25, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("turtle")}}>
                                         <Image source={require('./img/turtle.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "turtle" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Tartaruga</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Tartaruga</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("rabbit")}}>
                                         <Image source={require('./img/rabbit.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "rabbit" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Coelho</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10 }}>Coelho</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("hamster")}}>
                                         <Image source={require('./img/hamster.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "hamster" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Hamster</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10  }}>Hamster</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height:100, marginTop: 15, marginBottom: 15}}>
+                            <Row style={{height:100, marginTop: 10, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight style={{width: "33%", height:"100%"}} activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeAnimal("other")}}>
                                         <Image source={require('./img/other.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeAnimal === "other" ? <Badge success style={{ position: 'absolute', left: 80, bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ width: '33%', textAlign: 'center' }}>Outro</Text>
+                                    <Text style={{ width: '33%', textAlign: 'center'}}>Outro</Text>
                                 </Col>
                             </Row>
                         </Grid>
@@ -201,113 +222,113 @@ const EcraReport = props => {
                     (<View>
                         <Label style={{paddingTop: 15}}>Tipo de Lixo <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:100}}>
+                            <Row style={{height:100, marginTop: 25, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("metal")}}>
                                         <Image source={require('./img/can.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "metal" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}    
-                                    <Text style={{ textAlign: 'center' }}>Metal</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10}}>Metal</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("paper")}}>
                                         <Image source={require('./img/tissue-roll.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "paper" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null} 
-                                    <Text style={{ textAlign: 'center' }}>Papel</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Papel</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("dead")}}>
                                         <Image source={require('./img/dead.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "dead" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Animais mortos</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Animais mortos</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height:100, marginTop: 20}}>
+                            <Row style={{height:100, marginTop: 30, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("car")}}>
                                         <Image source={require('./img/car.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "car" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Peças automóveis</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Peças automóveis</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("dangerous")}}>
                                         <Image source={require('./img/biohazard-sign.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "dangerous" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Lixo tóxico</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Lixo tóxico</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("plastic")}}>
                                         <Image source={require('./img/water-bottle.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "plastic" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Plástico</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Plástico</Text>
                                 </Col>
                             </Row>
-                            <Row style={{height: 100, marginTop: 30, marginBottom: 15}}>
+                            <Row style={{height: 100, marginTop: 30, marginBottom: 25}}>
                                 <Col>
                                     <TouchableHighlight style={{width: "33%", height:"100%"}} activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setTypeOfTrash("other")}}>
                                         <Image source={require('./img/other.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { typeOfTrash === "other" ? <Badge success style={{ position: 'absolute', left: 80, bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ width: '33%', textAlign: 'center' }}>Outro</Text>
+                                    <Text style={{ width: '33%', textAlign: 'center', marginTop: 10   }}>Outro</Text>
                                 </Col>
                             </Row>
                         </Grid>
 
                         <Label style={{marginTop: 15}}>Recursos Necessários <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:125}}>
+                            <Row style={{height:125, marginTop: 20, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("bag")}}>
                                         <Image source={require('./img/eco-bag.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { extractionType === "bag" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Saco de Lixo</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Saco de Lixo</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("truck")}}>
                                         <Image source={require('./img/truck.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { extractionType === "truck" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Carro do Lixo</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Carro do Lixo</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setExtractionType("cart")}}>
                                         <Image source={require('./img/carry.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { extractionType === "cart" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Carrinho de Mão</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Carrinho de Mão</Text>
                                 </Col>
                             </Row>
                         </Grid>
 
                         <Label style={{marginTop: 30}}>Tipo de Acesso <Text style={{color: 'red'}}>*</Text></Label>
                         <Grid style={{padding: 5}}>
-                            <Row style={{height:125}}>
+                            <Row style={{height:125, marginTop: 10, marginBottom: 15}}>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setAccessType("easy")}}>
                                         <Image source={require('./img/city-building.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { accessType === "easy" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Citadino (fácil)</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Citadino (fácil)</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setAccessType("medium")}}>
                                         <Image source={require('./img/acreage.png')} style={{width: "100%", height:"100%"}}/>
                                     </TouchableHighlight>
                                     { accessType === "medium" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Rural (médio)</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Rural (médio)</Text>
                                 </Col>
                                 <Col>
                                     <TouchableHighlight activeOpacity={0.6} underlayColor="#DDDDDD" onPress={() => {setAccessType("hard")}}>
                                         <Image source={require('./img/mountains.png')} style={{width: "100%", height:"100%"}} resizeMode='contain'/>
                                     </TouchableHighlight>
                                     { accessType === "hard" ? <Badge success style={{ position: 'absolute', right: 10 , bottom: 0}}><Icon name="check" color="white" style={{ fontSize: 15, lineHeight: 20 }}/></Badge> : null}
-                                    <Text style={{ textAlign: 'center' }}>Montanhoso (difícil)</Text>
+                                    <Text style={{ textAlign: 'center', marginTop: 10   }}>Montanhoso (difícil)</Text>
                                 </Col>
                             </Row>
                         </Grid>
@@ -315,10 +336,10 @@ const EcraReport = props => {
                     
                     }
 
-                    <Label style={{marginTop: 30}}>Informação Adicional</Label>
+                    <Label style={{marginTop: 30, marginBottom: 5}}>Informação Adicional</Label>
                     <Textarea rowSpan={5} bordered enableAutoAutomaticScroll={false} scrollEnabled={false} keyboardShouldPersistTaps="always" placeholder="" defaultValue={adicionalInfo} onChangeText={adicionalInfo => setAdicionalInfo(adicionalInfo)}/>
 
-                    <Label style={{paddingTop: 15}}>Localização <Text style={{color: 'red'}}>*</Text></Label>
+                    <Label style={{paddingTop: 15, marginBottom: 5}}>Localização <Text style={{color: 'red'}}>*</Text></Label>
                     <View style={{height: 300}}>
                         <MapView
                             provider={PROVIDER_GOOGLE}
@@ -341,7 +362,8 @@ const EcraReport = props => {
                                     latitude: e.nativeEvent.coordinate.latitude, 
                                     longitude: e.nativeEvent.coordinate.longitude,
                                 });
-                                reverseCoord(e.nativeEvent.coordinate);
+                                //reverseCoord(e.nativeEvent.coordinate)
+                                getAddressFromCoordinates(e.nativeEvent.coordinate.latitude, e.nativeEvent.coordinate.longitude);
                             }}
                         >
                             {
@@ -379,6 +401,7 @@ const EcraReport = props => {
                     </Grid>
                 </Form>
             </Content>
+            
         </Container>
     )
 }
@@ -426,6 +449,11 @@ const styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'center', 
         paddingTop: 5
+    },
+    separador:{
+        marginVertical: 25,
+        borderBottomColor: '#737373',
+        borderBottomWidth: 2,
     }
 });
 

@@ -33,23 +33,20 @@ const ReportRecord = props => {
 
   useEffect( () => {
       const getCity = async () => {
-        const location = {
-                          latitude: data.latitude,
-                          longitude: data.longitude,
-                        }
-        // console.log('----------------LOCATION--------------');
-        // console.log(location);
-        const response = await Location.reverseGeocodeAsync(location)
-                                      .then( response => {
-                                        // console.log('here');
-                                        // console.log(response);
-                                        return response[0].city;
-                                      } )
-                                      .catch( error => {
-                                        console.log(error.message);
-                                        return error.message;
-                                      } );
-        setCity( response || 'Unable to find city' );
+        return new Promise((resolve) => {
+            const API_KEY = "CPnrb5c5grlxwZM2DQoXO1WYK-_8XSgnCCfmDYjHBGU";
+            const url = "https://revgeocode.search.hereapi.com/v1/revgeocode?at=" + data.latitude + "," + data.longitude + "&lang=pt-PT&apikey=" + API_KEY;
+            fetch(url)
+            .then(res => res.json())
+            .then((resJson) => {
+                var address = resJson.items[0].address;
+                setCity(address.city);
+            })
+            .catch((e) => {
+                console.log('Error in getAddressFromCoordinates', e)
+                resolve()
+            })
+        })
       }
       if (refreshRequested && !city) getCity();
     }
@@ -88,12 +85,12 @@ const ReportRecord = props => {
                     <Text>{data.isAnimalReport ? data.typeOfAnimal : data.typeOfTrash}</Text>
                 </View>
                 { data.additionalInfo ? 
-                  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-start', marginBottom: '5%', flexShrink: 1 }}>
+                  <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'flex-start', flexShrink: 1 }}>
                       <Text style={{marginVertical: 5, lineHeight: 20}}><Text style={{fontWeight: "bold"}}>Descrição: </Text>{data.additionalInfo}</Text>
                   </View>
                   : null 
                 }
-                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center' }}>
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'center', marginTop: '5%' }}>
                   <Button
                     onPress={goToDetails}
                     title="Ver detalhes"
